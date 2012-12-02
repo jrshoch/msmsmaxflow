@@ -13,4 +13,5 @@ public interface Graph {
     public Edge getEdgeWithEndpoints(Vertex vertex1, Vertex vertex2);
     
     public boolean areAdjacent(Vertex vertex1, Vertex vertex2);
+    public boolean isDirectionallyAdjacent(Vertex fromVertex, Vertex toVertex);
 }

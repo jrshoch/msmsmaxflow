@@ -4,8 +4,6 @@ import java.util.Collection;
 
 public class BasicVertex implements Vertex {
 
-    private static long id_counter = 0;
-
     private final long id;
     private final String name;
     private final EdgeMatrix edgeMatrix;
@@ -15,7 +13,7 @@ public class BasicVertex implements Vertex {
 
     private BasicVertex(String name, EdgeMatrix adjacencyMatrix) {
 	this.name = name;
-	this.id = id_counter++;
+	this.id = IdFactory.getId();
 	this.edgeMatrix = adjacencyMatrix;
 	this.neighboringVertices = null;
 	this.edgesFromMe = null;
