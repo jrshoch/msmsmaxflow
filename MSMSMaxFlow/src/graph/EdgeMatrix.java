@@ -4,6 +4,8 @@ import java.util.Collection;
 
 public interface EdgeMatrix {
 
+    public Collection<Vertex> getVertices();
+    
     public boolean areAdjacent(Vertex vertex1, Vertex vertex2);
     
     public boolean isDirectionallyAdjacent(Vertex fromVertex, Vertex toVertex);

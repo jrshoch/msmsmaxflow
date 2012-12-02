@@ -1,25 +1,47 @@
 package graph;
 
 public class BasicEdge implements Edge {
-
-    // Not implemented yet.
+    
+    private final long id;
+    private final String name;
+    
+    private final Vertex head;
+    private final Vertex tail;
+    
+    private BasicEdge(Vertex head, Vertex tail) {
+	this.id = IdFactory.getId();
+	this.name = head.getName() + " -> " + tail.getName();
+	this.head = head;
+	this.tail = tail;
+    }
+    
+    public static BasicEdge create(Vertex head, Vertex tail) {
+	return new BasicEdge(head, tail);
+    }
     
     @Override
     public Vertex getHead() {
-	// TODO Auto-generated method stub
-	return null;
+	return head;
     }
 
     @Override
     public Vertex getTail() {
-	// TODO Auto-generated method stub
-	return null;
+	return tail;
     }
 
     @Override
     public boolean isAdjacentTo(Vertex vertex) {
-	// TODO Auto-generated method stub
-	return false;
+	return vertex.equals(head) || vertex.equals(tail);
+    }
+
+    @Override
+    public long getId() {
+	return id;
+    }
+
+    @Override
+    public String getName() {
+	return name;
     }
 
 }
