@@ -1,8 +1,14 @@
 package operations;
 
+import graph.Edge;
 import graph.Face;
 import graph.Graph;
+import graph.Vertex;
+
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class Dualizer {
 
@@ -26,7 +32,7 @@ public class Dualizer {
       if (edgeCounts.isEmpty()){
         break;
       }
-      faceEdges = getCounterClockwiseCycles(edge, edgeCounts);
+      faceEdges = getCounterClockwiseCycles(edge, edgeCounts, graph);
       newFace = Face(faceEdges);
       output.add(newFace);
     }
@@ -43,7 +49,7 @@ public class Dualizer {
    * @return A collection of edges which constitute a cycle
    */
   private Collection<Edge> getCounterClockwiseCycles(Edge startingEdge, 
-      Map <Edge, Integer> edgeCounts){
+      Map <Edge, Integer> edgeCounts, Graph graph){
     Collection<Edge> cycleSet = new LinkedList <Edge> ();
 
     Vertex vertex = startingEdge.getHead();
@@ -52,9 +58,9 @@ public class Dualizer {
     int previousCount;
     while (!vertex.equals(startVertex)){
       for (Vertex neighbor : vertex.getUndirectedNeighboringVertices()){
-        nextEdge = getEdgeWithEndpoints(neighbor, vertex);
+        nextEdge = graph.getEdgeWithEndpoints(neighbor, vertex);
         if (nextEdge == null){
-          nextEdge = getEdgeWithEndpoints(vertex, neighbor);
+          nextEdge = graph.getEdgeWithEndpoints(vertex, neighbor);
         }
 
         // If the nextEdge is not in edgeCounts, we have deleted it, and
@@ -75,8 +81,8 @@ public class Dualizer {
     return cycleSet;
   }
 
-    public static Graph getDual(Graph graph){
-      Collection<Face> faces = graph.getFaces();
+    public Graph getDual(Graph graph){
+      Collection<Face> faces = getFaces(graph);
       Map<Edge, Face> adjacentFacesHash = new HashMap<Edge, Face> ();
 
       Face currentAdjFace;
