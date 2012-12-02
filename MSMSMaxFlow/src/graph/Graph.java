@@ -9,6 +9,7 @@ public interface Graph {
     
     public Collection<Vertex> getVertices();
     public Collection<Edge> getEdges();
+    public Collection<Face> getFaces();
     
     public boolean areAdjacent(Vertex vertex1, Vertex vertex2);
 }
