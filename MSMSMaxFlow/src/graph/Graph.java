@@ -9,7 +9,6 @@ public interface Graph {
     
     public Collection<Vertex> getVertices();
     public Collection<Edge> getEdges();
-    public Collection<Face> getFaces();
     
     public Edge getEdgeWithEndpoints(Vertex vertex1, Vertex vertex2);
     
