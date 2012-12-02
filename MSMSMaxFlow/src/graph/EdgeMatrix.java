@@ -10,7 +10,7 @@ public interface EdgeMatrix {
 
     public Edge getEdge(Vertex fromVertex, Vertex toVertex);
     
-    public Collection<Vertex> determineAdjacentVertices(Vertex fromVertex);
+    public Collection<Vertex> getNeighboringVertices(Vertex fromVertex);
     
     public Collection<Edge> getEdgesFrom(Vertex fromVertex);
 }

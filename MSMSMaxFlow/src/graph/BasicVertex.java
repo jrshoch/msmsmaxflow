@@ -8,17 +8,17 @@ public class BasicVertex implements Vertex {
 
     private final long id;
     private final String name;
-    private final EdgeMatrix adjacencyMatrix;
+    private final EdgeMatrix edgeMatrix;
 
-    private Collection<Vertex> adjacentVertices;
-    private Collection<Edge> adjacentEdges;
+    private Collection<Vertex> neighboringVertices;
+    private Collection<Edge> edgesFromMe;
 
     private BasicVertex(String name, EdgeMatrix adjacencyMatrix) {
 	this.name = name;
 	this.id = id_counter++;
-	this.adjacencyMatrix = adjacencyMatrix;
-	this.adjacentVertices = null;
-	this.adjacentEdges = null;
+	this.edgeMatrix = adjacencyMatrix;
+	this.neighboringVertices = null;
+	this.edgesFromMe = null;
     }
 
     public static BasicVertex create(String name, EdgeMatrix edgeMatrix) {
@@ -36,19 +36,19 @@ public class BasicVertex implements Vertex {
     }
 
     @Override
-    public Collection<Vertex> getAdjacentVertices() {
-	if (adjacentVertices == null) {
-	    adjacentVertices = adjacencyMatrix.determineAdjacentVertices(this);
+    public Collection<Vertex> getNeighboringVertices() {
+	if (neighboringVertices == null) {
+	    neighboringVertices = edgeMatrix.getNeighboringVertices(this);
 	}
-	return adjacentVertices;
+	return neighboringVertices;
     }
 
     @Override
-    public Collection<Edge> getAdjacentEdges() {
-	if (adjacentEdges == null) {
-	    adjacentEdges = adjacencyMatrix.getAdjacentEdges(this);
+    public Collection<Edge> getEdgesFrom() {
+	if (edgesFromMe == null) {
+	    edgesFromMe = edgeMatrix.getEdgesFrom(this);
 	}
-	return adjacentEdges;
+	return edgesFromMe;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class BasicVertex implements Vertex {
 
     @Override
     public boolean isAdjacentTo(Vertex vertex) {
-	return adjacencyMatrix.areAdjacent(this, vertex);
+	return edgeMatrix.areAdjacent(this, vertex);
     }
 
 }

@@ -7,8 +7,8 @@ public interface Vertex {
     public long getId();
     public String getName();
     
-    public Collection<Vertex> getAdjacentVertices();
-    public Collection<Edge> getAdjacentEdges();
+    public Collection<Vertex> getNeighboringVertices();
+    public Collection<Edge> getEdgesFrom();
     
     public boolean isAdjacentTo(Edge edge);
     public boolean isAdjacentTo(Vertex vertex);
