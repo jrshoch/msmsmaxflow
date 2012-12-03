@@ -6,12 +6,13 @@ import graph.Face;
 import graph.Graph;
 import graph.Vertex;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class DualFactory {
 
@@ -77,58 +78,57 @@ public class DualFactory {
         return cycleSet;
     }
     
-    protected static Vertex getVertexFromFace(Face face, Map<Face,Vertex> faceVertices){
+    protected static Vertex getVertexFromFace(Face face, Map<Face,Vertex> faceVertices, Graph graph){
 	Vertex output = faceVertices.get(face);
 	if (output == null){
 	    output = new FaceVertex(face);
 	    faceVertices.put(face, output);
+	    graph.insertVertex(output);
 	}
 	return output;
     }
 
-    protected static void constructGraphFromAdjacentFaces(List<Face> faceList, Graph graph,
+    protected static void constructGraphFromAdjacentFaces(Face[] faceList, Graph graph,
 	    Map<Face,Vertex> faceVertices){
-        // Assume that the first face in the list is the original face
-        Face rootFace = faceList.get(0);
-        Face neighboringFace;
-        Vertex newVertex1;
-        Vertex newVertex2;
-        Edge newEdge;
+        Vertex newVertex;
+        Edge newEdge1;
+        Edge newEdge2;
         
-        for (int i=1; i<faceList.size(); i++){
-            neighboringFace = faceList.get(i);
-            // TODO check to make sure vertex hasn't already been made
-            newVertex1 = getVertexFromFace(rootFace, faceVertices);
-            newVertex2 = getVertexFromFace(neighboringFace, faceVertices);
-            newEdge = new FaceEdge(newVertex1, newVertex2);
+        Vertex rootVertex = getVertexFromFace(faceList[0], faceVertices, graph);
+        for (int i=1; i<faceList.length; i++){
+            newVertex = getVertexFromFace(faceList[i], faceVertices, graph);
+            if (!graph.areAdjacent(rootVertex, newVertex)){
+        	newEdge1 = new FaceEdge(rootVertex, newVertex);
+        	graph.insertEdge(newEdge1);
+            }
+            if (!graph.areAdjacent(newVertex, rootVertex)){
+        	newEdge2 = new FaceEdge(newVertex, rootVertex);
+        	graph.insertEdge(newEdge2);
+            }
         }
+        
+        // Do it recursively for the rest of the faces in the list.
+        constructGraphFromAdjacentFaces(Arrays.copyOfRange(faceList, 1, faceList.length-1), graph, faceVertices);
     }
 
-    protected static <T> void addToAdjacentFacesList(Map<T,List<Face>> adjacentFaces, T graphObject,
+    protected static <T> void addToAdjacentFacesList(Map<T,Set<Face>> adjacentFaces, T graphObject,
 	    Face face){
-	List<Face> currentAdjacentFaces;
+	Set<Face> currentAdjacentFaces;
 	if (adjacentFaces.containsKey(graphObject)){
 	    currentAdjacentFaces = adjacentFaces.get(graphObject);
 	} else {
-	    currentAdjacentFaces = new ArrayList<Face> ();
+	    currentAdjacentFaces = new HashSet<Face> ();
 	}
-	//TODO make this faster since its currently iterating over a list
-	if (!currentAdjacentFaces.contains(face)){
-	    currentAdjacentFaces.add(face);
-	}
+	currentAdjacentFaces.add(face);
     }
     
     public static Graph getDual(Graph graph){
         Collection<Face> faces = getFaces(graph);
         
-        Map<Edge,List<Face>> edgeAdjacentFaces = new HashMap<Edge,List<Face>> ();
-        Map<Vertex,List<Face>> vertexAdjacentFaces = new HashMap<Vertex,List<Face>> ();
-        
-        List<Face> currentAdjacentFaces;
-        Vertex newVertex1;
-        Vertex newVertex2;
-        Edge newEdge;
-        
+        // These two hash sets will contain all the faces that are adjacent to a given
+        // edge or vertex.
+        Map<Edge,Set<Face>> edgeAdjacentFaces = new HashMap<Edge,Set<Face>> ();
+        Map<Vertex,Set<Face>> vertexAdjacentFaces = new HashMap<Vertex,Set<Face>> ();
         for (Face face : faces){
             for (Edge edge : face.getEdges()){
         	addToAdjacentFacesList(edgeAdjacentFaces, edge, face);
@@ -138,10 +138,16 @@ public class DualFactory {
             }
         }
 
+        Vertex newVertex1;
+        Vertex newVertex2;
+        Edge newEdge;
         Graph graph = new Graph(); 
         Map<Face,Vertex> faceVertices = new HashMap<Face,Vertex> ();
-        for (List<Face> faceList: adjacentFacesHash.values()){
-            constructGraphFromAdjacentFaces(faceList, graph, faceVertices);
+        for (Set<Face> faceList: edgeAdjacentFaces.values()){
+            constructGraphFromAdjacentFaces(faceList.toArray(new Face[]{}), graph, faceVertices);
+        }
+        for (Set<Face> faceList: vertexAdjacentFaces.values()){
+            constructGraphFromAdjacentFaces(faceList.toArray(new Face[]{}), graph, faceVertices);
         }
         return graph;
     }
