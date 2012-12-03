@@ -81,29 +81,29 @@ public class Dualizer {
     return cycleSet;
   }
 
-    public Graph getDual(Graph graph){
-      Collection<Face> faces = getFaces(graph);
-      Map<Edge, Face> adjacentFacesHash = new HashMap<Edge, Face> ();
+  public Graph getDual(Graph graph){
+    Collection<Face> faces = getFaces(graph);
+    Map<Edge, Face> adjacentFacesHash = new HashMap<Edge, Face> ();
 
-      Face currentAdjFace;
-      FaceVertex newVertex1;
-      FaceVertex newVertex2;
-      FaceEdge newEdge;
-      for (Face currentFace : faces){
-        for (Edge currentEdge : currentFace.getEdges()){
-          currentAdjFace = adjacentFacesHash.get(currentEdge);
-          if (currentAdjFace == null){
-            adjacentFacesHash.put(currentEdge, currentFace);
-          } else {
-            //TODO add these to the graph implementation somehow.
-            newVertex1 = FaceVertex(currentFace, currentAdjFace);
-            newVertex2 = FaceVertex(currentAdjFace, currentFace);
-            newEdge = FaceEdge(newVertex1, newVertex2);
+    Face currentAdjFace;
+    FaceVertex newVertex1;
+    FaceVertex newVertex2;
+    FaceEdge newEdge;
+    for (Face currentFace : faces){
+      for (Edge currentEdge : currentFace.getEdges()){
+        currentAdjFace = adjacentFacesHash.get(currentEdge);
+        if (currentAdjFace == null){
+          adjacentFacesHash.put(currentEdge, currentFace);
+        } else {
+          //TODO add these to the graph implementation somehow.
+          newVertex1 = FaceVertex(currentFace, currentAdjFace);
+          newVertex2 = FaceVertex(currentAdjFace, currentFace);
+          newEdge = FaceEdge(newVertex1, newVertex2);
 
-            adjacentFacesHash.remove(currentAdjFace);
-          }
+          adjacentFacesHash.remove(currentAdjFace);
         }
       }
     }
+  }
 
 }
