@@ -133,9 +133,6 @@ public class DualFactory {
             for (Edge edge : face.getEdges()){
         	addToAdjacentFacesList(edgeAdjacentFaces, edge, face);
             }
-            for (Vertex vertex : face.getVertices()){
-        	addToAdjacentFacesList(vertexAdjacentFaces, vertex, face);
-            }
         }
 
         Vertex newVertex1;
@@ -144,9 +141,6 @@ public class DualFactory {
         Graph graph = new Graph(); 
         Map<Face,Vertex> faceVertices = new HashMap<Face,Vertex> ();
         for (Set<Face> faceList: edgeAdjacentFaces.values()){
-            constructGraphFromAdjacentFaces(faceList.toArray(new Face[]{}), graph, faceVertices);
-        }
-        for (Set<Face> faceList: vertexAdjacentFaces.values()){
             constructGraphFromAdjacentFaces(faceList.toArray(new Face[]{}), graph, faceVertices);
         }
         return graph;
