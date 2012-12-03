@@ -104,22 +104,37 @@ public class DualFactory {
         }
     }
 
+    protected static <T> void addToAdjacentFacesList(Map<T,List<Face>> adjacentFaces, T graphObject,
+	    Face face){
+	List<Face> currentAdjacentFaces;
+	if (adjacentFaces.containsKey(graphObject)){
+	    currentAdjacentFaces = adjacentFaces.get(graphObject);
+	} else {
+	    currentAdjacentFaces = new ArrayList<Face> ();
+	}
+	//TODO make this faster since its currently iterating over a list
+	if (!currentAdjacentFaces.contains(face)){
+	    currentAdjacentFaces.add(face);
+	}
+    }
+    
     public static Graph getDual(Graph graph){
         Collection<Face> faces = getFaces(graph);
-        Map<Edge, List<Face>> adjacentFacesHash = new HashMap<Edge, List<Face>> ();
-
+        
+        Map<Edge,List<Face>> edgeAdjacentFaces = new HashMap<Edge,List<Face>> ();
+        Map<Vertex,List<Face>> vertexAdjacentFaces = new HashMap<Vertex,List<Face>> ();
+        
         List<Face> currentAdjacentFaces;
         Vertex newVertex1;
         Vertex newVertex2;
         Edge newEdge;
+        
         for (Face face : faces){
             for (Edge edge : face.getEdges()){
-                if (adjacentFacesHash.containsKey(edge)){
-                    currentAdjacentFaces = adjacentFacesHash.get(edge);
-                } else {
-                    currentAdjacentFaces = new ArrayList<Face> ();
-                }
-                currentAdjacentFaces.add(face);
+        	addToAdjacentFacesList(edgeAdjacentFaces, edge, face);
+            }
+            for (Vertex vertex : face.getVertices()){
+        	addToAdjacentFacesList(vertexAdjacentFaces, vertex, face);
             }
         }
 
