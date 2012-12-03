@@ -4,31 +4,37 @@ import graph.Face;
 import graph.Graph;
 import graph.Vertex;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class FaceIncidenceGraphFactory extends DualFactory {
-
-    public FaceIncidenceGraphFactory(Graph graph) {
-	super(graph);
-    }
     
-    public Graph getFaceIncidenceGraph(){
-	Collection<Face> faces = getFaces();
-	Graph output = super.getDual();
+    public static Graph getFaceIncidenceGraph(Graph graph){
+	Collection<Face> faces = getFaces(graph);
+	Graph output = getDual(graph);
 	
-	Map<Vertex,Set<Face>> adjacentFaces = new HashMap<Vertex,Set<Face>> ();
+	Map<Vertex,List<Face>> adjacentFacesHash = new HashMap<Vertex,List<Face>> ();
 	
-	Set<Face> currentlyAdjacent;
+	List<Face> currentAdjacentFaces;
 	for (Face face : faces){
-	    currentlyAdjacent = new HashSet<Face> ();
 	    for (Vertex vertex : face.getVertices()){
 		//TODO finish this
+		if (adjacentFacesHash.containsKey(vertex)){
+		    currentAdjacentFaces = adjacentFacesHash.get(vertex);
+		} else {
+		    currentAdjacentFaces = new ArrayList<Face> ();
+		}
+		currentAdjacentFaces.add(face);
 	    }
 	}
+	
+	for (List<Face> faceList: adjacentFacesHash.values()){
+	    constructGraphFromAdjacentFaces(faceList, output);
+	}
+	return output;
     }
 
 }

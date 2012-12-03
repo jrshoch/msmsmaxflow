@@ -85,11 +85,10 @@ public class DualFactory {
         for (int i=1; i<faceList.length; i++){
             neighboringFace = faceList.get(i);
             // TODO check to make sure vertex hasn't already been made
-            newVertex1 = new FaceVertex(rootFace)
+            newVertex1 = new FaceVertex(rootFace);
             newVertex2 = new FaceVertex(neighboringFace);
             newEdge = new FaceEdge(newVertex1, newVertex2);
         }
-
     }
 
     public static Graph getDual(Graph graph){
@@ -112,8 +111,7 @@ public class DualFactory {
         }
 
         Graph graph; 
-        for (Map.Entry<Edge,List<Face>> entry: adjacentFacesHash.entrySet()){
-            List<Face> facesList = entry.getValue();
+        for (List<Face> faceList: adjacentFacesHash.values()){
             constructGraphFromAdjacentFaces(faceList, graph);
         }
         return graph;
