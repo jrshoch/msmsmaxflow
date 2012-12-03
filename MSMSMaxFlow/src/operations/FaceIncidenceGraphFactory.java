@@ -7,7 +7,6 @@ import graph.Vertex;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,9 +28,6 @@ public class FaceIncidenceGraphFactory extends DualFactory {
             }
         }
 
-        Vertex newVertex1;
-        Vertex newVertex2;
-        Edge newEdge;
         Graph graph = new Graph(); 
         Map<Face,Vertex> faceVertices = new HashMap<Face,Vertex> ();
         for (Set<Face> faceList: edgeAdjacentFaces.values()){
@@ -41,11 +37,6 @@ public class FaceIncidenceGraphFactory extends DualFactory {
             constructGraphFromAdjacentFaces(faceList.toArray(new Face[]{}), graph, faceVertices);
         }
         return graph;
-	
-	for (List<Face> faceList: adjacentFacesHash.values()){
-	    constructGraphFromAdjacentFaces(faceList, output);
-	}
-	return output;
     }
 
 }

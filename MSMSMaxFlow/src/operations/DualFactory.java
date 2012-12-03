@@ -125,19 +125,13 @@ public class DualFactory {
     public static Graph getDual(Graph graph){
         Collection<Face> faces = getFaces(graph);
         
-        // These two hash sets will contain all the faces that are adjacent to a given
-        // edge or vertex.
         Map<Edge,Set<Face>> edgeAdjacentFaces = new HashMap<Edge,Set<Face>> ();
-        Map<Vertex,Set<Face>> vertexAdjacentFaces = new HashMap<Vertex,Set<Face>> ();
         for (Face face : faces){
             for (Edge edge : face.getEdges()){
         	addToAdjacentFacesList(edgeAdjacentFaces, edge, face);
             }
         }
 
-        Vertex newVertex1;
-        Vertex newVertex2;
-        Edge newEdge;
         Graph graph = new Graph(); 
         Map<Face,Vertex> faceVertices = new HashMap<Face,Vertex> ();
         for (Set<Face> faceList: edgeAdjacentFaces.values()){
