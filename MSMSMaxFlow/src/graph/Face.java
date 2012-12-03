@@ -10,6 +10,7 @@ public interface Face {
     public boolean isInsideFace(Edge edge);
     public boolean isInsideFace(Vertex vertex);
     
-    public boolean isAdjacent(Edge edge);
+    public boolean isAdjacentToFace(Edge edge);
+    public boolean isAdjacentToFace(Vertex vertex);
 
 }
