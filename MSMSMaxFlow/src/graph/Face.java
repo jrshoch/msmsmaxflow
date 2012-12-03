@@ -4,6 +4,9 @@ import java.util.Collection;
 
 public interface Face {
     
+    public long getId();
+    public String getName();
+    
     public Collection<Edge> getEdges();
     public Collection<Vertex> getVertices();
     

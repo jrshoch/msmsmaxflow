@@ -10,6 +10,9 @@ public interface Graph {
     public Collection<Vertex> getVertices();
     public Collection<Edge> getEdges();
     
+    public Vertex getVertex(Long id);
+    public Edge getEdge(Long id);
+    
     public Edge getEdgeWithEndpoints(Vertex vertex1, Vertex vertex2);
     
     public boolean areAdjacent(Vertex vertex1, Vertex vertex2);
