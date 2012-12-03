@@ -76,17 +76,30 @@ public class DualFactory {
         }
         return cycleSet;
     }
+    
+    protected static Vertex getVertexFromFace(Face face, Map<Face,Vertex> faceVertices){
+	Vertex output = faceVertices.get(face);
+	if (output == null){
+	    output = new FaceVertex(face);
+	    faceVertices.put(face, output);
+	}
+	return output;
+    }
 
-    protected static constructGraphFromAdjacentFaces(List<Face> faceList, Graph graph){
+    protected static void constructGraphFromAdjacentFaces(List<Face> faceList, Graph graph,
+	    Map<Face,Vertex> faceVertices){
         // Assume that the first face in the list is the original face
         Face rootFace = faceList.get(0);
         Face neighboringFace;
-        Vertex vertex;
-        for (int i=1; i<faceList.length; i++){
+        Vertex newVertex1;
+        Vertex newVertex2;
+        Edge newEdge;
+        
+        for (int i=1; i<faceList.size(); i++){
             neighboringFace = faceList.get(i);
             // TODO check to make sure vertex hasn't already been made
-            newVertex1 = new FaceVertex(rootFace);
-            newVertex2 = new FaceVertex(neighboringFace);
+            newVertex1 = getVertexFromFace(rootFace, faceVertices);
+            newVertex2 = getVertexFromFace(neighboringFace, faceVertices);
             newEdge = new FaceEdge(newVertex1, newVertex2);
         }
     }
@@ -110,9 +123,10 @@ public class DualFactory {
             }
         }
 
-        Graph graph; 
+        Graph graph = new Graph(); 
+        Map<Face,Vertex> faceVertices = new HashMap<Face,Vertex> ();
         for (List<Face> faceList: adjacentFacesHash.values()){
-            constructGraphFromAdjacentFaces(faceList, graph);
+            constructGraphFromAdjacentFaces(faceList, graph, faceVertices);
         }
         return graph;
     }
