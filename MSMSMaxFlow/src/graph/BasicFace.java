@@ -2,13 +2,12 @@ package graph;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 public class BasicFace implements Face {
 
     private final Collection<Edge> edges; 
-    private Collection<Vertex> vertices;
+    private Set<Vertex> vertices;
     
     public BasicFace(Collection<Edge> edges){
 	this.edges = edges;
@@ -18,21 +17,13 @@ public class BasicFace implements Face {
     public Collection<Edge> getEdges() {
 	return edges;
     }
-
-    private void addToVertices(Vertex vertex, Set<Vertex> usedVertices){
-	if (!usedVertices.contains(vertex)){
-	    vertices.add(vertex);
-	    usedVertices.addAll(vertex);
-	}
-    }
     
     private void populateVertices(){
-	vertices = new LinkedList<Vertex> ();
+	vertices = new HashSet<Vertex> ();
 
-	Set<Vertex> usedVertices = new HashSet<Vertex> ();
 	for (Edge edge : edges){
-	    addToVertices(edge.getHead(), usedVertices);
-	    addToVertices(edge.getTail(), usedVertices);
+	    vertices.add(edge.getHead());
+	    vertices.add(edge.getTail());
 	}
     }
     
