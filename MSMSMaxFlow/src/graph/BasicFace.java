@@ -1,34 +1,37 @@
 package graph;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasicFace implements Face {
 
-    private final Collection<Edge> edges; 
-    private Set<Vertex> vertices;
+    private final long id;
+    private final String name;
     
-    public BasicFace(Collection<Edge> edges){
+    private final List<Edge> edges;
+    private List<Vertex> vertices;
+    
+    
+    public BasicFace(String name, List<Edge> edges){
+	this.id = IdFactory.getId();
+	this.name = name;
 	this.edges = edges;
     }
     
     @Override
-    public Collection<Edge> getEdges() {
+    public List<Edge> getEdgesInOrder() {
 	return edges;
     }
     
-    private void populateVertices(){
-	vertices = new HashSet<Vertex> ();
-
+    private void populateVertices(){	
+	vertices = new ArrayList<Vertex> ();
 	for (Edge edge : edges){
 	    vertices.add(edge.getHead());
-	    vertices.add(edge.getTail());
 	}
     }
     
     @Override
-    public Collection<Vertex> getVertices() {
+    public List<Vertex> getVerticesInOrder() {
 	if (vertices == null){
 	    populateVertices();
 	}
@@ -79,6 +82,16 @@ public class BasicFace implements Face {
 	    }
 	}
 	return false;
+    }
+
+    @Override
+    public long getId() {
+	return id;
+    }
+
+    @Override
+    public String getName() {
+	return name;
     }
 
 

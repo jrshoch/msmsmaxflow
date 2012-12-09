@@ -1,11 +1,11 @@
 package graph;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface FaceVertex extends Vertex {
 
     public Face getFace();
-    public Collection<Vertex> getFaceVerticesInOrder();
-    public Collection<Edge> getFaceEdgesInOrder();
+    public List<Vertex> getFaceVerticesInOrder();
+    public List<Edge> getFaceEdgesInOrder();
 
 }

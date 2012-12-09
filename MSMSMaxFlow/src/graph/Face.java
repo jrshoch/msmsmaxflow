@@ -1,14 +1,14 @@
 package graph;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Face {
     
     public long getId();
     public String getName();
     
-    public Collection<Edge> getEdges();
-    public Collection<Vertex> getVertices();
+    public List<Edge> getEdgesInOrder();
+    public List<Vertex> getVerticesInOrder();
     
     public boolean isInsideFace(Edge edge);
     public boolean isInsideFace(Vertex vertex);

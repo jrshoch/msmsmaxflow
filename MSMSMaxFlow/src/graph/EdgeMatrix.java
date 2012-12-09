@@ -15,4 +15,7 @@ public interface EdgeMatrix {
     public Collection<Vertex> getNeighboringVertices(Vertex fromVertex);
     
     public Collection<Edge> getEdgesFrom(Vertex fromVertex);
+    
+    public void insertVertex(Vertex vertex);
+    public void insertEdge(Edge edge);
 }
