@@ -1,12 +1,12 @@
 package graph;
 
-public interface Edge {
+public interface Edge <T extends Vertex>{
 
     public long getId();
     public String getName();
     
-    public Vertex getHead();
-    public Vertex getTail();
+    public T getHead();
+    public T getTail();
     
-    public boolean isAdjacentTo(Vertex vertex);
+    public boolean isAdjacentTo(T vertex);
 }

@@ -2,19 +2,18 @@ package graph;
 
 import java.util.Collection;
 
-public interface Graph {
+public interface Graph <V extends Vertex, E extends Edge> {
 
     public long getId();
     public String getName();
     
-    public Collection<Vertex> getVertices();
-    public Collection<Edge> getEdges();
+    public Collection<V> getVertices();
+    public Collection<E> getEdges();
     
     public Vertex getVertex(Long id);
-    public Edge getEdge(Long id);
     
-    public Edge getEdgeWithEndpoints(Vertex vertex1, Vertex vertex2);
+    public E getEdgeWithEndpoints(V vertex1, V vertex2);
     
-    public boolean areAdjacent(Vertex vertex1, Vertex vertex2);
-    public boolean isDirectionallyAdjacent(Vertex fromVertex, Vertex toVertex);
+    public boolean areAdjacent(V vertex1, V vertex2);
+    public boolean isDirectionallyAdjacent(V fromVertex, V toVertex);
 }

@@ -1,4 +1,8 @@
-package graph;
+package dual;
+
+import graph.Edge;
+import graph.IdFactory;
+import graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;

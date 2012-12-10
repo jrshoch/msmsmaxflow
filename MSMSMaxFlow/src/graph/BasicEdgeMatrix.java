@@ -4,32 +4,29 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+public class BasicEdgeMatrix <V extends Vertex, E extends Edge> implements EdgeMatrix<V,E> {
 
-public class BasicEdgeMatrix implements EdgeMatrix {
-
-    private Map<Vertex, Map<Vertex, Edge>> matrix;
+    private Map<V, Map<V, E>> matrix;
     
-    private BasicEdgeMatrix(Map<Vertex, Map<Vertex, Edge>> matrix) {
+    private BasicEdgeMatrix(Map<V, Map<V, E>> matrix) {
 	this.matrix = matrix;
     }
     
-    public static BasicEdgeMatrix create(boolean[][] booleanMatrix) {
-	Map<Vertex, Map<Vertex, Edge>> matrix = Maps.newHashMap();
+    public static <V extends Vertex,E extends Edge> BasicEdgeMatrix create(boolean[][] booleanMatrix) {
+	Map<V, Map<V, E>> matrix = Maps.newHashMap();
 	BasicEdgeMatrix result = new BasicEdgeMatrix(matrix);
 	int numberOfVertices = booleanMatrix.length;
-	List<Vertex> vertices = Lists.newArrayList();
+	List<V> vertices = Lists.newArrayList();
 	while (vertices.size() < numberOfVertices) {
 	    vertices.add(BasicVertex.create(String.valueOf(vertices.size()), result));
 	}
 	for (int i = 0; i < numberOfVertices; i++) {
-	    Vertex fromVertex = vertices.get(i);
-	    Map<Vertex, Edge> vertexMap = Maps.newHashMap();
+	    V fromVertex = vertices.get(i);
+	    Map<V, E> vertexMap = Maps.newHashMap();
 	    for (int j = 0; j < numberOfVertices; j++) {
 		if (booleanMatrix[i][j]) {
-		    Vertex toVertex = vertices.get(j);
-		    Edge edge = BasicEdge.create(fromVertex, toVertex);
+		    V toVertex = vertices.get(j);
+		    E edge = BasicEdge.create(fromVertex, toVertex);
 		    vertexMap.put(toVertex, edge);
 		}
 	    }
@@ -39,34 +36,34 @@ public class BasicEdgeMatrix implements EdgeMatrix {
     }
     
     @Override
-    public boolean areAdjacent(Vertex vertex1, Vertex vertex2) {
+    public boolean areAdjacent(V vertex1, V vertex2) {
 	return isDirectionallyAdjacent(vertex1, vertex2) ||
 		isDirectionallyAdjacent(vertex2, vertex1);
     }
 
     @Override
-    public boolean isDirectionallyAdjacent(Vertex fromVertex, Vertex toVertex) {
+    public boolean isDirectionallyAdjacent(V fromVertex, V toVertex) {
 	return matrix.get(fromVertex).containsKey(toVertex);
     }
 
     @Override
-    public Edge getEdge(Vertex fromVertex, Vertex toVertex) {
+    public E getEdge(V fromVertex, V toVertex) {
 	return isDirectionallyAdjacent(fromVertex, toVertex) ?
 		matrix.get(fromVertex).get(toVertex) : null;
     }
 
     @Override
-    public Collection<Vertex> getNeighboringVertices(Vertex fromVertex) {
+    public Collection<V> getNeighboringVertices(V fromVertex) {
 	return matrix.get(fromVertex).keySet();
     }
 
     @Override
-    public Collection<Edge> getEdgesFrom(Vertex fromVertex) {
+    public Collection<E> getEdgesFrom(V fromVertex) {
 	return matrix.get(fromVertex).values();
     }
 
     @Override
-    public Collection<Vertex> getVertices() {
+    public Collection<V> getVertices() {
 	return matrix.keySet();
     }
 

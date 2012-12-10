@@ -14,12 +14,12 @@ import java.util.PriorityQueue;
 public class Dijkstras {
     
     public static ShortestPathsTree getShortestPathsTree(Graph graph, Vertex source){
-	Map<Vertex,Vertex> predecessors = getShortestPaths(graph, source);
+	Map<Vertex,Vertex> predecessors = getShortestPathsPredecessors(graph, source);
 	ShortestPathsTree output = new ShortestPathsTree(predecessors, source);
 	return output;
     }
     
-    public static Map<Vertex,Vertex> getShortestPaths(Graph graph, Vertex source){
+    public static Map<Vertex,Vertex> getShortestPathsPredecessors(Graph graph, Vertex source){
 	
 	Collection<Vertex> allVertices = graph.getVertices();
 	Comparator<DistanceVertexPair> comparator = new DistanceVertexPairComparator();

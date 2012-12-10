@@ -1,7 +1,6 @@
 package operations;
 
 import graph.Edge;
-import graph.Face;
 import graph.Graph;
 import graph.Vertex;
 
@@ -9,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import dual.Face;
 
 public class FaceIncidenceGraphFactory extends DualFactory {
     

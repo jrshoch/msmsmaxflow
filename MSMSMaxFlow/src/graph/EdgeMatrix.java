@@ -2,20 +2,20 @@ package graph;
 
 import java.util.Collection;
 
-public interface EdgeMatrix {
+public interface EdgeMatrix <V extends Vertex, E extends Edge>{
 
-    public Collection<Vertex> getVertices();
+    public Collection<V> getVertices();
     
-    public boolean areAdjacent(Vertex vertex1, Vertex vertex2);
+    public boolean areAdjacent(V vertex1, V vertex2);
     
-    public boolean isDirectionallyAdjacent(Vertex fromVertex, Vertex toVertex);
+    public boolean isDirectionallyAdjacent(V fromVertex, V toVertex);
 
-    public Edge getEdge(Vertex fromVertex, Vertex toVertex);
+    public E getEdge(V fromVertex, V toVertex);
     
-    public Collection<Vertex> getNeighboringVertices(Vertex fromVertex);
+    public Collection<V> getNeighboringVertices(V fromVertex);
     
-    public Collection<Edge> getEdgesFrom(Vertex fromVertex);
+    public Collection<E> getEdgesFrom(V fromVertex);
     
-    public void insertVertex(Vertex vertex);
-    public void insertEdge(Edge edge);
+    public void insertVertex(V vertex);
+    public void insertEdge(E edge);
 }

@@ -1,7 +1,13 @@
-package graph;
+package dual;
+
+import graph.Edge;
+import graph.EdgeMatrix;
+import graph.IdFactory;
+import graph.Vertex;
 
 import java.util.Collection;
 import java.util.List;
+
 
 public class BasicFaceVertex implements FaceVertex {
 
