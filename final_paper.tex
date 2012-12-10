@@ -162,9 +162,17 @@ This naive data structure would therefore be able to complete each while loop in
 
 This paper, then, examines the constants associated with both the naive spanning tree data structure and the more complicated top tree data structure presented in \cite{tarjanwerneck2005}. At some point, the top tree data structure will overtake the naive algorithm due to its superior computational complexity. However, a priori, it is unclear whether this point occurs within a reasonable graph size.  
 
+In practice, it would be nice the magnitude of the graph size at which the crossover occurs. If crossover occurs for graphs with millions of vertices, in practice it would be much more advantageous to implement Erikson's algorithm using the naive spanning tree due to the higher efficiency and lower development time. 
+
+Therefore, we implement Erikson's algorithm using both the naive and the top tree data structures for storing spanning trees. The actually use of the data structure was abstracted away so that the only change in the Erikson algorithm code when using one data structure or the other is the initialization of a different class of spanning trees.
+
+This abstraction allows us to test the Erikson algorithm using the two data structures without having to worry about interactions due to other parts of the code. In essence, we can isolate the differences in run time which come directly from implementing the spanning tree with different data structures.
+
 \subsection{Automated Testing}
 
+To examine runtime, we generated planar graphs of different sizes. A parallelized graph generator and testing framework called SLOTIN was created to examine the runtime of Erikson's algorithm with different implementation details. SLOTIN allows one to specify the distribution of graphs to test, the most commonly used being a uniform distribution over the number of vertices $n$ in a graph where $n \in [a,b]$. SLOTIN first creates graphs in the lower range of the distribution and continues to create larger and larger graphs. Graph creation is done in parallel while two versions of the Erikson algorithm are running. The first version uses the naive implementation of the spanning tree while the second version uses Tarjan and Werneck's top tree data structure to implement the spanning tree. 
 
+Each created graph is put into the queues for both versions of the Erikson algorithm. 
 
 \newpage
 
