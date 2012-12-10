@@ -9,4 +9,5 @@
 \BOOKMARK [2][-]{subsection.3.4}{Formalized Algorithm}{section.3}
 \BOOKMARK [1][-]{section.4}{Framework and Infrastructure}{}
 \BOOKMARK [2][-]{subsection.4.1}{Design Decisions}{section.4}
-\BOOKMARK [2][-]{subsection.4.2}{Automated Testing}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{Dynamic Tree Structure}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{Automated Testing}{section.4}
