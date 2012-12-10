@@ -6,8 +6,12 @@
 \usepackage{rotating}
 \usepackage{hyperref}
 \usepackage{verbatim}
+\usepackage{amsthm}
 
 \bibliographystyle{plain}
+
+\newtheorem{lemma}{Lemma}
+
 
 %--------Meta Data: Fill in your info------
 \title{Max Flow in a Directed Planar Graph}
@@ -58,7 +62,7 @@ The authors in \cite{greigporteousseheult1989} create a network of pixels $i$, e
 
 The network is clearly planar because the graph can be embedded onto a two dimensional plane (the image). Moreover, \cite{greigporteousseheult1989} spawned a large literature in the computer vision field using max-flows as a means to separate out nosie from images. Other max-flow algorithms in the computer vision field follow in a similar vein to \cite{greigporteousseheult1989}. 
 
-\section{Overview of Erikson Algorithm}
+\section{Overview of Erikson's Algorithm}
 
 This section provides an overview of the Erikson algorithm. We summarize the main results from the paper in \cite{erikson2010} and sketch the proofs of the main theorems. The Erikson algorithm relies on the observation that max-flow in directed planar graphs can be reformulated as a parametric shortest paths problem. The algorithm finds a shortest paths spanning tree which whose parameter is perturbed in multiple iterations of the algorithm. Eventually, the resulting tree will arrive at a state where the max-flow can be computed with simple arithmetic. 
 
@@ -78,13 +82,21 @@ A number of algorithms that solve this problem use the concept of a pivot tree. 
 
 This algorithm therefore computes the maximum $\lambda$ for which the graph $G$ has no negative-weight cycles. Erikson's algorithm will use the same concept and apply it to max-flow. In particular, Erikson uses the parameter $\lambda$ to pivot edges in a shortest paths tree. Using a well defined set of weights, one can show that the resulting algorithm solves the max-flow problem.
 
+We also define the dual residual network $G^*_\lambda$ of some graph $G$ for some parameter $\lambda$. It is defined on the dual graph $G^*$ and has a cost function $c : \mathrm{R} \times E^* \to \mathrm{R}$ where $c(\lambda, e^*) = c(\lambda, e)$. Note that the edge $e$ is well defined since each edge $e$ has a corresponding dual edge $e^*$ which is $90^\circ$ counterclockwise from $e$ and connects the faces which $e$ separates. Notice that each edge $e^*$ corresponds to exactly one edge, so taking the cost on the primal edge $c(\lambda, e)$ is well defined for each dual edge $e^*$. 
+
 \subsection{Erikson's Algorithm}
 
-The algorithm that Erikson provides in \cite{erikson2010} first creates a shortest-paths tree, then runs a parameterized shortest-paths algorithm. It uses dynamic tree data structures in order to find pivots and remove them from the tree. 
+The algorithm that Erikson provides in \cite{erikson2010} first creates a shortest-paths tree, then runs a parameterized shortest-paths algorithm. It uses dynamic tree data structures in order to find pivots and remove them from the tree. Erikson uses a few lemmas to prove the correctness of his algorithm. We list them below:
+
+\begin{lemma}
+There exists a feasible $s-t$ flow in $G$ with value $\lambda$ if and only if the dual residual network $G^*_\lambda$ does not contain a negative cycle. 
+\end{lemma}
 
 \section{Framework and Infrastructure}
 
 The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}. 
+
+\newpage
 
 \begin{thebibliography}{9}
 
