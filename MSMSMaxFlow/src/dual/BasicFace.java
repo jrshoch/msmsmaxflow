@@ -7,35 +7,35 @@ import graph.Vertex;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicFace implements Face {
+public class BasicFace <V extends Vertex, E extends Edge<V>> implements Face<V,E> {
 
     private final long id;
     private final String name;
     
-    private final List<Edge> edges;
-    private List<Vertex> vertices;
+    private final List<E> edges;
+    private List<V> vertices;
     
     
-    public BasicFace(String name, List<Edge> edges){
+    public BasicFace(String name, List<E> edges){
 	this.id = IdFactory.getId();
 	this.name = name;
 	this.edges = edges;
     }
     
     @Override
-    public List<Edge> getEdgesInOrder() {
+    public List<E> getEdgesInOrder() {
 	return edges;
     }
     
     private void populateVertices(){	
-	vertices = new ArrayList<Vertex> ();
-	for (Edge edge : edges){
+	vertices = new ArrayList<V> ();
+	for (E edge : edges){
 	    vertices.add(edge.getHead());
 	}
     }
     
     @Override
-    public List<Vertex> getVerticesInOrder() {
+    public List<V> getVerticesInOrder() {
 	if (vertices == null){
 	    populateVertices();
 	}
@@ -43,12 +43,12 @@ public class BasicFace implements Face {
     }
 
     @Override
-    public boolean isInsideFace(Edge edge) {
+    public boolean isOnBoundaryOfFace(E edge) {
 	return edges.contains(edge);
     }
 
     @Override
-    public boolean isInsideFace(Vertex vertex) {
+    public boolean isOnBoundaryOfFace(V vertex) {
 	if (vertices == null){
 	    populateVertices();
 	}
@@ -56,9 +56,9 @@ public class BasicFace implements Face {
     }
 
     @Override
-    public boolean isAdjacentToFace(Edge edge) {
-	Vertex head = edge.getHead();
-	Vertex tail = edge.getTail();
+    public boolean isAdjacentToFace(E edge) {
+	V head = edge.getHead();
+	V tail = edge.getTail();
 	
 	if (vertices == null){
 	    populateVertices();
@@ -74,7 +74,7 @@ public class BasicFace implements Face {
     }
 
     @Override
-    public boolean isAdjacentToFace(Vertex vertex) {
+    public boolean isAdjacentToFace(V vertex) {
 	if (vertices == null){
 	    populateVertices();
 	}

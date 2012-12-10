@@ -5,18 +5,18 @@ import graph.Vertex;
 
 import java.util.List;
 
-public interface Face {
+public interface Face <V extends Vertex, E extends Edge<V>>{
     
     public long getId();
     public String getName();
     
-    public List<Edge> getEdgesInOrder();
-    public List<Vertex> getVerticesInOrder();
+    public List<E> getEdgesInOrder();
+    public List<V> getVerticesInOrder();
     
-    public boolean isInsideFace(Edge edge);
-    public boolean isInsideFace(Vertex vertex);
+    public boolean isOnBoundaryOfFace(E edge);
+    public boolean isOnBoundaryOfFace(V vertex);
     
-    public boolean isAdjacentToFace(Edge edge);
-    public boolean isAdjacentToFace(Vertex vertex);
+    public boolean isAdjacentToFace(E edge);
+    public boolean isAdjacentToFace(V vertex);
 
 }

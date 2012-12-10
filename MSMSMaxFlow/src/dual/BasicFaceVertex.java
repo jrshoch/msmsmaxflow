@@ -9,15 +9,16 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class BasicFaceVertex implements FaceVertex {
+public class BasicFaceVertex <V extends Vertex, E extends Edge<V>>
+	implements FaceVertex {
 
     private final long id;
     private final String name;
     private final Face face;
     
     private final EdgeMatrix edgeMatrix;
-    private Collection<Vertex> neighboringVertices;
-    private Collection<Edge> edgesFromMe;
+    private Collection<V> neighboringVertices;
+    private Collection<E> edgesFromMe;
     
     public BasicFaceVertex(String name, Face face, EdgeMatrix edgeMatrix){
 	this.face = face;
@@ -37,7 +38,7 @@ public class BasicFaceVertex implements FaceVertex {
     }
 
     @Override
-    public Collection<Vertex> getNeighboringVertices() {
+    public Collection<V> getNeighboringVertices() {
 	if (neighboringVertices == null){
 	    neighboringVertices = edgeMatrix.getNeighboringVertices(this);
 	}
@@ -45,7 +46,7 @@ public class BasicFaceVertex implements FaceVertex {
     }
 
     @Override
-    public Collection<Edge> getEdgesFrom() {
+    public Collection<E> getEdgesFrom() {
 	if (edgesFromMe == null){
 	    edgesFromMe = edgeMatrix.getEdgesFrom(this);
 	}
@@ -53,12 +54,12 @@ public class BasicFaceVertex implements FaceVertex {
     }
 
     @Override
-    public boolean isAdjacentTo(Edge edge) {
+    public boolean isAdjacentTo(E edge) {
 	return edge.isAdjacentTo(this);
     }
 
     @Override
-    public boolean isAdjacentTo(Vertex vertex) {
+    public boolean isAdjacentTo(V vertex) {
 	// Check if this is the tail and vertex is the head
 	for (Vertex neighbor : this.neighboringVertices){
 	    if (neighbor.equals(vertex)){
@@ -80,12 +81,12 @@ public class BasicFaceVertex implements FaceVertex {
     }
 
     @Override
-    public List<Vertex> getFaceVerticesInOrder() {
+    public List<V> getFaceVerticesInOrder() {
 	return face.getVerticesInOrder();
     }
 
     @Override
-    public List<Edge> getFaceEdgesInOrder() {
+    public List<E> getFaceEdgesInOrder() {
 	return face.getEdgesInOrder();
     }
 

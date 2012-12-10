@@ -5,9 +5,9 @@ import graph.Edge;
 
 public class BasicFaceEdge <T extends FaceVertex> extends BasicEdge<T> implements FaceEdge<T> {
     
-    private final Edge primalEdge;
+    private final Edge<T> primalEdge;
     
-    public BasicFaceEdge(T head, T tail, Edge primalEdge){
+    public BasicFaceEdge(T head, T tail, Edge<T> primalEdge){
 	super(head, tail);
 	this.primalEdge = primalEdge;
     }
