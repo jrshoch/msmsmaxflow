@@ -50,6 +50,20 @@ This problem can be reduced to a single source, single sink maximum flow problem
 
 Notice that this type of transportation problem occurs with incredible frequency. Every large chain of stores with a need to move goods across land has a similar problem. Retailers such as Amazon, Walmart, and Target have a large incentive to optimize their transportation networks, as do large shipping companies such as FedEx and UPS. 
 
+\subsection{Computer Vision Example}
+
+There are also many examples of planar max-flow networks which are relevant in computer vision. In particular, finding graph cuts in an image is a widely used industrial application of max-flow. Greig, Porteous, and Seheult \cite{greigporteousseheult1989} provide an example of using max-flow for smoothing noisy images. They show that the maximum a posteriori estimate of a noisy image is given exactly by finding a max-flow in a specifically defined image network. 
+
+The authors in \cite{greigporteousseheult1989} create a network of pixels $i$, each with value $x_i \in \{0,1\}$ corresponding to white and black. Each pixel $i$ in the flow network has neighbors which are the pixels touching it in the actual image. The capacity of the edge between pixels $i$ and $j$ is defined as a log-likelihood ratio corresponding to the probabilitiy that the values of pixels $i$ and $j$ are correct. The paper shows that finding a maximum flow through the network results in a maximum a posteriori estimate of the image. 
+
+The network is clearly planar because the graph can be embedded onto a two dimensional plane (the image). Moreover, \cite{greigporteousseheult1989} spawned a large literature in the computer vision field using max-flows as a means to separate out nosie from images. Other max-flow algorithms in the computer vision field follow in a similar vein to \cite{greigporteousseheult1989}. 
+
+\section{Overview of Erikson Algorithm}
+
+This section provides an overview of the Erikson algorithm. We summarize the main results from the paper in \cite{erikson2010} and sketch the proofs of the main theorems. The Erikson algorithm relies on the observation that max-flow in directed planar graphs can be reformulated as a parametric shortest paths problem. The algorithm finds a shortest paths spanning tree which whose parameter is perturbed in multiple iterations of the algorithm. Eventually, the resulting tree will arrive at a state where the max-flow can be computed with simple arithmetic. 
+
+
+
 \section{Framework and Infrastructure}
 
 The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}. 
@@ -77,6 +91,13 @@ The Erikson algorithm was implemented in Java 1.7 and is available on \url{https
         Proceedings of the Eighteenth Annual ACM Symposium on Theory of Computing.
         136-146.
         1986.
+
+    \bibitem{greigporteousseheult1989}
+        D.M. Greig, B.T. Porteous, and A.H. Seheult.
+        ``Exact Maximum A Posteriori Estimation for Binary Images.''
+        \emph{Journal of the Royal Statistical Society. Series B (Methodological).}
+        51, 2: 271-279.
+        1989.
 
 \end{thebibliography}
 
