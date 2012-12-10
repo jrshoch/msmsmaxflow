@@ -2,10 +2,10 @@
 \BOOKMARK [1][-]{section.2}{Motivation}{}
 \BOOKMARK [2][-]{subsection.2.1}{Supply Chain Example}{section.2}
 \BOOKMARK [2][-]{subsection.2.2}{Computer Vision Example}{section.2}
-\BOOKMARK [1][-]{section.3}{Overview of Erikson's Algorithm}{}
+\BOOKMARK [1][-]{section.3}{Overview of Erickson's Algorithm}{}
 \BOOKMARK [2][-]{subsection.3.1}{Definitions}{section.3}
 \BOOKMARK [2][-]{subsection.3.2}{Parametric Shortest Paths}{section.3}
-\BOOKMARK [2][-]{subsection.3.3}{Erikson's Algorithm}{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{Erickson's Algorithm}{section.3}
 \BOOKMARK [2][-]{subsection.3.4}{Formalized Algorithm}{section.3}
 \BOOKMARK [1][-]{section.4}{Framework and Infrastructure}{}
 \BOOKMARK [2][-]{subsection.4.1}{Design Decisions}{section.4}

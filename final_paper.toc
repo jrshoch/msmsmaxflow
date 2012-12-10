@@ -2,10 +2,10 @@
 \contentsline {section}{\numberline {2}Motivation}{2}{section.2}
 \contentsline {subsection}{\numberline {2.1}Supply Chain Example}{2}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}Computer Vision Example}{3}{subsection.2.2}
-\contentsline {section}{\numberline {3}Overview of Erikson's Algorithm}{3}{section.3}
+\contentsline {section}{\numberline {3}Overview of Erickson's Algorithm}{3}{section.3}
 \contentsline {subsection}{\numberline {3.1}Definitions}{3}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Parametric Shortest Paths}{4}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Erikson's Algorithm}{4}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.3}Erickson's Algorithm}{4}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Formalized Algorithm}{5}{subsection.3.4}
 \contentsline {section}{\numberline {4}Framework and Infrastructure}{6}{section.4}
 \contentsline {subsection}{\numberline {4.1}Design Decisions}{6}{subsection.4.1}
