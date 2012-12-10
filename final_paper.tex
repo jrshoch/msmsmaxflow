@@ -62,7 +62,11 @@ The network is clearly planar because the graph can be embedded onto a two dimen
 
 This section provides an overview of the Erikson algorithm. We summarize the main results from the paper in \cite{erikson2010} and sketch the proofs of the main theorems. The Erikson algorithm relies on the observation that max-flow in directed planar graphs can be reformulated as a parametric shortest paths problem. The algorithm finds a shortest paths spanning tree which whose parameter is perturbed in multiple iterations of the algorithm. Eventually, the resulting tree will arrive at a state where the max-flow can be computed with simple arithmetic. 
 
+\subsection{Definitions}
 
+First, we shall present the fundamental definitions and terminology used throughout the this paper and the Erikson \cite{erikson2010} paper. Note that the notation is the same as in \cite{erikson2010} to reduce confusion. A graph $G = (V,E)$ will be a directed planar graph where each edge $e$ denoted as $u \to v$ contains a head and tail defined as $head(e) = v$ and $tail(e) = u$ respectively. The reversal of the graph is defined as $rev(e) = head(e) \to tail(e)$. 
+
+Each primal graph $G$ has a corresponding dual $G^*$ where each primal face is converted into a dual vertex. Two dual vertices are connected by a dual edge if and only if there is a corresponding primal edge connecting the two faces represented by the two dual vertices. In particular, consider faces $a$ and $b$ in the primal graph, and consider some edge $e$ which separates these two faces. Then the dual graph will contain an edge $e^*$ (the dual of the edge $e$) which is oriented $90^\circ$ counterclockwise to $e$ and connects $a^*$ and $b^*$ in the dual. 
 
 \section{Framework and Infrastructure}
 
