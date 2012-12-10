@@ -68,6 +68,20 @@ First, we shall present the fundamental definitions and terminology used through
 
 Each primal graph $G$ has a corresponding dual $G^*$ where each primal face is converted into a dual vertex. Two dual vertices are connected by a dual edge if and only if there is a corresponding primal edge connecting the two faces represented by the two dual vertices. In particular, consider faces $a$ and $b$ in the primal graph, and consider some edge $e$ which separates these two faces. Then the dual graph will contain an edge $e^*$ (the dual of the edge $e$) which is oriented $90^\circ$ counterclockwise to $e$ and connects $a^*$ and $b^*$ in the dual. 
 
+A flow between source $s$ and sink $t$ is defined as a function $\phi : E \to \mathrm{R}$. The flow satisfies antisymmetry and conservation. In particular, the antisymmetric constraint specifies that $\phi(e) = -rev(\phi(e))$ while the conservation constraint specifies that $\sum_{e_w} \phi(e) = 0$ for all edges $e$ such that $w = head(e)$. We define a feasible flow by defining a non-negative capacity function $c : E \to \mathrm{R}$ on each edge $e$. For a flow to be feasible on a graph, we must have $\phi(e) \leq c(e)$ for all edges $e$ in the graph. 
+
+\subsection{Parametric Shortest Paths}
+
+Before moving on to Erikson's algorithm, it is instructive to examine the parametric shortest paths problem, since Erikson's algorithm is fundamentally based on the idea of using parametric shortest paths to compute the max-flow. For this problem, consider a graph $G = (V,E)$ and an additional parameter $\lambda$. We define a new cost function $c : E \to \mathrm{R}$ and obtain a subset $E' \subset E$ of the edges of the graph. The cost function will be set to $c(\lambda, e) = c(e) - \lambda$ for all edges $e \in E'$ and $c(\lambda, e) = c(e)$ for all edges $e \notin E'$. The parametric shortest paths problem asks to compute the largest value of $\lambda$ for which the resulting graph with weights $c(\lambda, e)$ has no negative-weight cycles. 
+
+A number of algorithms that solve this problem use the concept of a pivot tree. Young, Tarjan, and Orlin \cite{youngtarjanorlin1991} solve the problem in $O(nm + n^2 \log n)$ by constructing a single-source shortest paths tree. The distance used in the shortest paths tree is equal to the cost $c(\lambda, e)$ for each edge $e$, given a parameter $\lambda$. The Young, Tarjan, and Orlin algorithm starts increasing $\lambda$ from $-\infty$. At some point, $d(\lambda, v) = d(\lambda, u) + c(\lambda, v)$ for some edge $u \to v$ which is not in the shortest paths tree. When this occcurs, the shortest paths tree incorporates the $u \to v$ edge and removes an appropriate edge $e$ where $head(e) = v$ so that the tree remains a valid shortest paths tree. The algorithm continues until a cycle appears in the tree. Notice that at this point, increasing $\lambda$ by any amount will cause a negative-weight cycle in the original graph because the cycle must be of weight 0. 
+
+This algorithm therefore computes the maximum $\lambda$ for which the graph $G$ has no negative-weight cycles. Erikson's algorithm will use the same concept and apply it to max-flow. In particular, Erikson uses the parameter $\lambda$ to pivot edges in a shortest paths tree. Using a well defined set of weights, one can show that the resulting algorithm solves the max-flow problem.
+
+\subsection{Erikson's Algorithm}
+
+The algorithm that Erikson provides in \cite{erikson2010} first creates a shortest-paths tree, then runs a parameterized shortest-paths algorithm. It uses dynamic tree data structures in order to find pivots and remove them from the tree. 
+
 \section{Framework and Infrastructure}
 
 The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}. 
@@ -100,8 +114,15 @@ The Erikson algorithm was implemented in Java 1.7 and is available on \url{https
         D.M. Greig, B.T. Porteous, and A.H. Seheult.
         ``Exact Maximum A Posteriori Estimation for Binary Images.''
         \emph{Journal of the Royal Statistical Society. Series B (Methodological).}
-        51, 2: 271-279.
+        51(2): 271-279.
         1989.
+
+    \bibitem{youngtarjanorlin1991}
+        N.E. Young, R.E. Tarjan, and J.B. Orlin. 
+        ``Faster Parametric Shortest Path and Minimum Balance Algorithms.''
+        \emph{Networks.}
+        21(2): 205-221.
+        1991.
 
 \end{thebibliography}
 
