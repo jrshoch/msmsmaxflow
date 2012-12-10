@@ -86,15 +86,59 @@ We also define the dual residual network $G^*_\lambda$ of some graph $G$ for som
 
 \subsection{Erikson's Algorithm}
 
-The algorithm that Erikson provides in \cite{erikson2010} first creates a shortest-paths tree, then runs a parameterized shortest-paths algorithm. It uses dynamic tree data structures in order to find pivots and remove them from the tree. Erikson uses a few lemmas to prove the correctness of his algorithm. We list them below:
+The algorithm that Erikson provides in \cite{erikson2010} first creates a shortest-paths tree, then runs a parameterized shortest-paths algorithm. It uses a dynamic tree data structure to find pivots and remove them from the tree. Erikson uses a few lemmas to prove the correctness of his algorithm. We list the important ones below (proofs are given in the original paper).
 
 \begin{lemma}
 There exists a feasible $s-t$ flow in $G$ with value $\lambda$ if and only if the dual residual network $G^*_\lambda$ does not contain a negative cycle. 
+\label{lem:resid-network}
 \end{lemma}
+
+\begin{lemma}
+$\lambda_{max}$ is the first critical value of $\lambda$ whose pivot introduces a directed cycle into $T_{\lambda}$. 
+\label{lem:directed-cycle}
+\end{lemma}
+
+We define $\lambda_{max}$ as the maximum value of $\lambda$ for which $G^*_\lambda$ has no negative weight cycles and is well defined. Note that lemma \ref{lem:resid-network} implies that $\lambda_{max}$ is exactly the maximum flow of the original graph $G$ with capacities $c : E \to \mathrm{R}$. To show this, suppose there existed some flow of value $f > \lambda_{max}$. Then, it must be feasible so that by lemma \ref{lem:resid-network}, $G^*_f$ does not contain a negative cycle. However, this implies that $f > \lambda_{max}$ is a value of $\lambda$ for which $G^*_\lambda$ has no negative weight cycles, which is a contradiction.
+
+The algorithm computes $T_\lambda$, which is the shortest paths tree with parameter $\lambda$, computed on $G^*_\lambda$. Notice that using a version of the parametric shortest paths algorithm presented in the above section, one can obtain $\lambda_{max}$ and hence the max-flow of $G$. This can be found using $T_\lambda$ and by increasing $\lambda$ and pivoting edges into $T_\lambda$ until a cycle is found. Using lemma \ref{lem:directed-cycle}, once a directed cycle occurs in $T_{\lambda}$, it must be true that $\lambda$ will be equal to the max flow in $G$.
+
+The overall structure of the algorithm is now set. First, one computes the minimum-distance spanning tree in $G^*_\lambda$. Next, iteratively decrease $\lambda$ and maintain the minimum-distance spanning tree with parameter $\lambda$. Eventually, a directed cycle will be introduced, and when that occurs, $\lambda$ will be equal to the maximum flow value. 
+
+\subsection{Formalized Algorithm}
+
+To make the above overview more formal, the pseudocode for Erikson's algorithm is provided below. First, however, we define the distance $dist(\lambda, p)$ for a vertex $p$ in the dual with parameter $\lambda$ as the shortest path distance from some arbitrary starting node $o$ to $p$. Note that the shortest path distance is computed over the cost function $c(\lambda, e^*) = c(\lambda, e)$ as defined earlier in the paper (each dual edge retains the cost function of its primal). We define slackness on an edge $e^* = u \to v$ in the dual with parameter $\lambda$ as $slack(\lambda, e^*) = dist(\lambda, u) + c(\lambda, e^*) - dist(\lambda, v)$. 
+
+The slackness of an edge in the dual provides a basis for how pivots in the shortest paths tree are introduced. In particular, Erikson notes that the algorithm has an invariant which keeps $slack(\lambda, e^*) = 0$ exactly when $e^* \in T_{\lambda}$ or when $\lambda$ is a critical value corresponding to a new pivot. 
+
+We are now ready to present Erikson's algorithm in pseudocode (taken from Erikson \cite{erikson2010}):
+\begin{quote}
+\begin{verbatim}
+PlanarMaxFlow(G, c, s, t):
+    Initialize spanning tree L
+    While s and t are in the same component of L:
+        LP = path in L from s to t
+        min_edge = edge in LP* with minimum slack
+        d = slack(min_edge)
+        forall edges e in LP:
+            slack(e*) = slack(e*) - d
+            slack(rev(e*)) = slack(rev(e*)) + d
+        L.remove(e*)
+        if pred(head(e)) != null:
+            L.insert(Edge(head(e),e)*)
+        pred(head(e)) = tail(e)
+    forall edges e:
+        flow(e) = c(e) - slack(e*)
+    return flow
+\end{verbatim}
+\end{quote}
+
+Note that the algorithm runs in $O(n \log n)$ time when one uses dynamic tree data structures for maintaining the spanning tree. For instance, Tarjan and Werneck \cite{tarjanwerneck2005} present top trees which are able to do all necessary spanning tree operations in $O(\log n)$ time. These operations include determining whether two vertices exist in the same component of the spanning tree, finding the minimum weight edge in a path, and finding a path between two vertices (in addition to being able to insert and delete edges from the tree). 
+
+Erikson proves a $O(n \log n)$ runtime for the algorithm by bounding the number of pivots by $O(n)$ (see lemma 2.6 of his paper for more details of the proof). Once the number of pivots is bounded, there are only a constant number of $O(\log n)$ operations per pivot, which implies $O(n \log n)$ total time for the while loop. Initializing the spanning tree requires $O(n)$ for computing the dual and $O(n \log n)$ for computing shortest paths in a planar graph (by using Dijkstra's). The top tree can also be initialized in $O(n \log n)$ time using Tarjan and Werneck's initialization scheme. 
 
 \section{Framework and Infrastructure}
 
-The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}. 
+The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}.  
 
 \newpage
 
@@ -128,6 +172,14 @@ The Erikson algorithm was implemented in Java 1.7 and is available on \url{https
         \emph{Journal of the Royal Statistical Society. Series B (Methodological).}
         51(2): 271-279.
         1989.
+
+    \bibitem{tarjanwerneck2005}
+        R.E. Tarjan and R.F. Werneck.
+        ``Self-Adjusting Top Trees.''
+        \emph{Annual ACM Symposium on Discrete Algorithms.}
+        Proceedings of the Sixteenth Annual ACM Symposium on Discrete Algorithms.
+        812-822,
+        2005.
 
     \bibitem{youngtarjanorlin1991}
         N.E. Young, R.E. Tarjan, and J.B. Orlin. 
