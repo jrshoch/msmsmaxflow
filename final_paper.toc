@@ -8,3 +8,5 @@
 \contentsline {subsection}{\numberline {3.3}Erikson's Algorithm}{4}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Formalized Algorithm}{5}{subsection.3.4}
 \contentsline {section}{\numberline {4}Framework and Infrastructure}{6}{section.4}
+\contentsline {subsection}{\numberline {4.1}Design Decisions}{6}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Automated Testing}{7}{subsection.4.2}

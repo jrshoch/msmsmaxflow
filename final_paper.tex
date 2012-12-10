@@ -138,7 +138,23 @@ Erikson proves a $O(n \log n)$ runtime for the algorithm by bounding the number 
 
 \section{Framework and Infrastructure}
 
-The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}.  
+The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}. The architecture was created so that each piece of code was as modular and extensible as possible. Special emphasis was put on readable and self-documenting code so that the algorithm could be tweaked easily. Since design decisions usually favored writing good code, some computational speed was lost. However, the most noticeable loss of speed due to the object oriented architecture would prevail across all graph algorithms under our particular framework, which means that each algorithm could be compared in relation to each other.
+
+\subsection{Design Decisions}
+
+We chose to implement the Erikson algorithm in Java because of its object-oriented nature. Java represented a middle ground between performance and modularity. Implementation in a lower level language like C or C++ would have made it difficult to generalize the architecture, while a higher level language like Python or Ruby would have been too slow for automated testing at a large scale. Java provides enough object oriented functionality to make our architecture easily extensible and modular, as well as enough speed to be able to run the Erikson and other max-flow algorithms on large graphs.
+
+The graph $G$ and its dual $G^*$ were abstracted away as objects so that all max-flow algorithms that we implemented would be able to operate under the same API. The graph class operates in relation to other objects, each representing a physical portion of a graph. Vertex was a fundamental object, with edges being composed of two vertices. Faces were then constructed by a cycle of vertices and edges. 
+
+Most of the work in the graph was handled by the Graph object. The graph contained information about neighboring vertices and served as a medium for finding and manipulating flows along edges. The original Graph interface created an immutable object so that vertices and edges were predefined and linked up together in the graph. The immutability enabled the algorithm to assume that vertices and edges would never get destroyed, which greatly simplified the amount of work for most algorithms. Moreover, this immutability improved the speed of the underlying data structure since only calls to the structure would be made. Flows were overlayed on top of the graph by creating subclasses which contained information about flow and capacity.  
+
+We tried to demarcate objects and methods in a manner which had natural analogies to graphs. Since a vertex, face, or edge without a graph does not have very much useful information, most of the knowledge was abstracted to the graph level. Neighboring vertices could be found only at the graph level, with each vertex completely unaware of its connections with other vertices. An edge had information about its head and tail vertex, but could not performa any operations.
+
+Flow, slackness, and other additions to the graph and its subcomponents were represented by creating subclasses from the basic interfaces. This enhanced the modularity of the design. For instance, any breadth first search on the graph would only need to know about the vertices and edges, along with their neighbors, and would not be given informatoin about flow or slackness. 
+
+\subsection{Automated Testing}
+
+
 
 \newpage
 
