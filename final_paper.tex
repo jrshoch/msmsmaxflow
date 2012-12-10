@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+
+%-------Packages---------
+\usepackage{enumerate}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{rotating}
+\usepackage{hyperref}
+\usepackage{verbatim}
+
+\bibliographystyle{plain}
+
+%--------Meta Data: Fill in your info------
+\title{Max Flow in a Directed Planar Graph}
+\date{\today}
+\author{Jason Hoch and John Wang \\
+6.854 Final Paper}
+
+
+\begin{document}
+
+\maketitle
+
+\abstract{We implement an max flow algorithm presented by Erikson \cite{erikson2010}.}
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+The general maximum flow problem has many applications in operations research and supply chain management. The classic algorithms used to solve the problem are polynomial, but relatively slow. The Edmonds-Karp algorithm requires $O(n m^2)$ time, while Ford Fulkerson requires $O(m \max |f|)$. Improvements made throughout the last few decades have decreased these runtimes by using concepts from blocking-flow and push-relabel algorithms. Dinitz's blocking flow algorithm improved the runtime to $O(n^2 m)$ by using a breadth-first-search in the residual graph to build a layered graph \cite{dinitz1970}. Goldberg and Tarjan \cite{goldbergtarjan1986} introduced a general framework for solving max-flow problems by using the idea of push relabel. Many of the fastest algorithms for maximum flow are variants of this general framework. Recently, Orlin presented an algorithm which runs in $O(nm)$ time. 
+
+A practical application of a maximum flow algorithm, however, would find many of these algorithms prohibitively slow. Even the best known algorithm of Orlin for general graphs is $o(n^2)$ for reasonably connected graphs. However, these algorithms perform poorly due to their generality. In practice, only a certain subset of graphs are likely to arise. For instance, in many applications of maximum flow, it is reasonable to assume that the graphs will be planar. 
+
+This is the case for maximum flow networks on any type of two dimensional map. In these cases, solving the problem in its full generality does too much work, and enforcing constraints on the assumptions of the graph can improve runtime. This paper focuses on the algorithm proposed by Erikson 2010 \cite{erikson2010}, which exploits planarity to achieve $O(n \log n)$ runtime. This significantly reduces the execution time of the algorithm, at least theoretically.
+
+This paper implements the Erikson algorithm and presents the observed runtime on a set of planar graphs. The set of planar graphs generated contains graphs of varying sizes. Our implementation of the Erikson algorithm is tested for how it scales with $n$, the number of vertices in a graph. We attempt to determine an empirical function for how the observed runtime scales with $n$, and compare it with standard library implementations of max-flow algorithms.
+
+The rest of the paper presents a brief overview of the Erikson algorithm, the unique features in our implementation, and the object oriented infrastructure we created. We present the results from our implementation on a set of planar graphs and compare it with standard maximum flow algorithms.
+
+\section{Motivation}
+
+In this section, we provide motivation for our implementation. In particular, we motivate the use of an algorithm specific to planar graphs. We argue that most applications of maximum flow are constrained to planar graphs, and hence, that the Erikson algorithm provides a non-trivial improvement upon past algorithms. 
+
+\subsection{Supply Chain Example}
+
+First, suppose a chain of department stores has a supply chain and is attempting to find the best way to move goods from its production facilities to its stores. The store must transport the goods across the network to its stores, and can stop at any intermediate warehouse in its network. There are a discrete number of warehouses that its trucks can stop at, but there are only a discrete number of trucks that it sends over any route. The goal is to achieve the highest throughput of goods possible from production facilities to its stores.
+
+This problem can be reduced to a single source, single sink maximum flow problem by created a supernode $s$ representing all the production facilities and a supernode $t$ representing the stores. Each production facility will be connected to $s$ and each store will be connected to $t$ with an infinite capacity edge. Finding the maximum flow between $s$ and $t$ will then find the total throughput for a given timespan. Notice that since this transportation problem is defined on land, it is confined to a planar network (assuming that warehouses or rest-stops are located at each path intersection). 
+
+Notice that this type of transportation problem occurs with incredible frequency. Every large chain of stores with a need to move goods across land has a similar problem. Retailers such as Amazon, Walmart, and Target have a large incentive to optimize their transportation networks, as do large shipping companies such as FedEx and UPS. 
+
+\section{Framework and Infrastructure}
+
+The Erikson algorithm was implemented in Java 1.7 and is available on \url{https://github.com/jrshoch/msmsmaxflow}. 
+
+\begin{thebibliography}{9}
+
+    \bibitem{erikson2010}
+        Jeff Erikson.
+       ``Maximum Flows and Parametric Shortest Paths in Planar Graphs.''
+       \emph{Proceedings of the 21st Annual ACM-SIAM Symposium on Discrete Algorithms}.
+       794-804.
+       2010.
+
+    \bibitem{dinitz1970}
+        Yefim Dinitz.
+        ``Algorithm for Solution of a Problem of Maximum Flow in a Network with Power Estimation.''
+        \emph{Doklady Akademii nauk SSSR}.
+        11: 1277-1280.
+        1970.
+
+    \bibitem{goldbergtarjan1986}
+        Andrew Goldberg and Robert Tarjan.
+        ``A New Approach to the Maximum Flow Problem.''
+        \emph{Annual ACM Symposium on Theory of Computing}.
+        Proceedings of the Eighteenth Annual ACM Symposium on Theory of Computing.
+        136-146.
+        1986.
+
+\end{thebibliography}
+
+\end{document}
