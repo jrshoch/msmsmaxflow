@@ -1,13 +1,17 @@
 package shortestpaths;
 
+import flow.FlowEdge;
+import graph.Graph;
 import graph.Vertex;
-
-import java.math.BigDecimal;
 
 public class DistanceCalculation {
     
-    public static BigDecimal getDijkstraDistance(Vertex a, Vertex b){
-	// Some calculation which returns the distanace between vertices a and b;
-	return null;
+    public static <V extends Vertex> long getDijkstraDistance(V a, V b, Graph<V, FlowEdge> graph){
+	// Some calculation which returns the distance between vertices a and b;
+	if (graph.isDirectionallyAdjacent(a, b)){
+	    FlowEdge edge = graph.getEdgeWithEndpoints(a, b);
+	    return edge.getResidualFlow();
+	}
+	return Long.MAX_VALUE;
     }
 }

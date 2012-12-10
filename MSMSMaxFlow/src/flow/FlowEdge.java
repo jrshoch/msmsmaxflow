@@ -2,14 +2,12 @@ package flow;
 
 import graph.Edge;
 
-import java.math.BigInteger;
-
 public interface FlowEdge extends Edge {
     
-    public BigInteger getFlow();
-    public BigInteger getCapacity();
+    public long getFlow();
+    public long getCapacity();
     
-    public BigInteger getResidualFlow();
+    public long getResidualFlow();
     
-    public void setFlow(BigInteger flowValue);
+    public void setFlow(long flowValue);
 }

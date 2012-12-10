@@ -3,39 +3,38 @@ package flow;
 import graph.BasicEdge;
 import graph.Vertex;
 
-import java.math.BigInteger;
 
-public class BasicFlowEdge  extends BasicEdge implements FlowEdge {
+public class BasicFlowEdge extends BasicEdge implements FlowEdge {
 
-    private BigInteger flow;
-    private final BigInteger capacity;
+    private long flow;
+    private final long capacity;
     
-    protected BasicFlowEdge(Vertex head, Vertex tail, BigInteger capacity){
+    protected BasicFlowEdge(Vertex head, Vertex tail, long capacity){
 	super(head, tail);
 	this.capacity = capacity;
     }
     
-    public static BasicFlowEdge create(Vertex head, Vertex tail, BigInteger capacity){
+    public static BasicFlowEdge create(Vertex head, Vertex tail, long capacity){
 	return new BasicFlowEdge(head, tail, capacity);
     }
 
     @Override
-    public BigInteger getFlow() {
+    public long getFlow() {
 	return flow;
     }
 
     @Override
-    public BigInteger getCapacity() {
+    public long getCapacity() {
 	return capacity;
     }
 
     @Override
-    public BigInteger getResidualFlow() {
-	return capacity.subtract(flow);
+    public long getResidualFlow() {
+	return (this.capacity - this.flow);
     }
 
     @Override
-    public void setFlow(BigInteger flowValue) {
+    public void setFlow(long flowValue) {
 	this.flow = flowValue;
     }
 
