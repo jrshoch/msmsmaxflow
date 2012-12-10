@@ -11,3 +11,6 @@
 \contentsline {subsection}{\numberline {4.1}Design Decisions}{6}{subsection.4.1}
 \contentsline {subsection}{\numberline {4.2}Dynamic Tree Structure}{7}{subsection.4.2}
 \contentsline {subsection}{\numberline {4.3}Automated Testing}{8}{subsection.4.3}
+\contentsline {section}{\numberline {5}Results and Analysis}{8}{section.5}
+\contentsline {subsection}{\numberline {5.1}Counting Lines of Code $loc$}{8}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}SLOTIN Results}{9}{subsection.5.2}

@@ -170,9 +170,28 @@ This abstraction allows us to test the Erikson algorithm using the two data stru
 
 \subsection{Automated Testing}
 
-To examine runtime, we generated planar graphs of different sizes. A parallelized graph generator and testing framework called SLOTIN was created to examine the runtime of Erikson's algorithm with different implementation details. SLOTIN allows one to specify the distribution of graphs to test, the most commonly used being a uniform distribution over the number of vertices $n$ in a graph where $n \in [a,b]$. SLOTIN first creates graphs in the lower range of the distribution and continues to create larger and larger graphs. Graph creation is done in parallel while two versions of the Erikson algorithm are running. The first version uses the naive implementation of the spanning tree while the second version uses Tarjan and Werneck's top tree data structure to implement the spanning tree. 
+To examine the runtime of different max-flow algorithms, we generated planar graphs of different sizes. A parallelized graph generator and testing framework called SLOTIN was created to examine the runtime of Erikson's algorithm with different implementation details. SLOTIN allows one to specify the distribution of graphs to test, the most commonly used being a uniform distribution over the number of vertices $n$ in a graph where $n \in [a,b]$. SLOTIN first creates graphs in the lower range of the distribution and continues to create larger and larger graphs. Graph creation is done in parallel while two versions of the Erikson algorithm are running. The first version uses the naive implementation of the spanning tree while the second version uses Tarjan and Werneck's top tree data structure to implement the spanning tree. There is a final max-flow algorithm, which is a standard implementation of push-relabel. 
 
-Each created graph is put into the queues for both versions of the Erikson algorithm. 
+Each created graph is put into the queues for both versions of the Erikson algorithm and the standard max-flow algorithm. The graph producer process finishes after it has generated some specified number of graphs from its given distribution. The SLOTIN program finishes when all of the queues are emptied, but provides periodic summary statistics on the runtimes of each program with respect to different size graphs. 
+
+This automated testing structure allows us to examine the performance of multiple max-flow algorithms over the same graphs. In particular, we can vary the types of graphs that the set of max-flow algorithms receives by changing the distribution given to SLOTIN. This allows us to examine the effectiveness of each max-flow algorithm over different sets of inputs and identify which algorithms are faster, depending on context. 
+
+\section{Results and Analysis}
+
+This section examines the performance of the Erikson algorithm in comparison to other standard max-flow algorithms. This section attempts to provide practical guidance for people attempting to implement max-flow algorithms. Because of this, we also take into account the number of lines of code associated with each algorithm, where the lines of code $loc$ are defined recursively. The next subsection provides the methodology for how we count the lines of code, and we proceed to present the results from our SLOTIN testing framework.
+
+\subsection{Counting Lines of Code $loc$}
+
+Since each algorithm uses the fundamental data structures, such as Graph, Vertex, and Edge in a different manner, we need to control how each algorithm used each data structure. In particular, consider an algorithm which uses a specialized method on a graph that no other algorithm uses. The developer of the graph interface would have to spent some amount of extra time solely to cater to that algorithm's needs. Therefore, we define the number of lines of code associated with a method $i$ in a particular class $c$ using the following formula:
+\begin{eqnarray}
+loc_{i} = raw\_loc_{i} + \frac{1}{4} raw\_loc_{c} + \sum_{j \in i} loc_{j} 
+\end{eqnarray}
+
+Here, $raw\_loc_i$ is the total lines of code found in method $i$, while $loc_c$ is the total lines of code found in class $c$ (where $i$ is a method in $c$). The sum term $\sum_{j \in i} loc_j$ adds the $loc$ of all methods $j$ which are called from method $i$ (and are not recursive calls). This simple formula gives a crude measure of the amount of work a developer would need to invest into creating a given max-flow algorithm. By examining performance results with development time, we can achieve a better understanding of which algorithms are best implemented in practice. Take the hypthothetical instance when algorithm $x$ is 5\% faster than algorithm $y$ on the average graph found in practical applications, but algorithm $x$ requires 500\% more development time. Different developers will implement different algorithms, depending on the scope and goals of the project. This paper provides useful information to these developers in the context of maximum flow algorithms.
+
+\subsection{SLOTIN Results}
+
+None so far.
 
 \newpage
 
