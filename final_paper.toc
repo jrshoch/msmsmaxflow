@@ -14,3 +14,4 @@
 \contentsline {section}{\numberline {5}Results and Analysis}{8}{section.5}
 \contentsline {subsection}{\numberline {5.1}Counting Lines of Code $loc$}{8}{subsection.5.1}
 \contentsline {subsection}{\numberline {5.2}SLOTIN Results}{9}{subsection.5.2}
+\contentsline {section}{\numberline {6}Conclusion}{9}{section.6}

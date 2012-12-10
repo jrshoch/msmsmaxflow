@@ -24,7 +24,7 @@
 
 \maketitle
 
-\abstract{We implement an max flow algorithm presented by Erikson \cite{erikson2010}.}
+\abstract{Maximum flow is a classical problem in computer science and many incremental improvements have been made in the last decade. However, few authors have attempted to examine the practical results of many of these algorithms. We provide insight into max-flow implementations in industry. In particular, we examine the maximum flow problem on directed planar graphs, since they seem to have the most practical application. We implement an $O(n \log n)$ algorithm presented by Erikson \cite{erikson2010} and examine its runtime in comparison with standard push-relabel algorithms. We also examine the theoretical and practical implications of using a naive spanning tree data structure, instead of the top-tree data structure suggested in \cite{erikson2010}, as a subprocedure in the algorithm. We find preliminary results that show the naive implementation outperforms the more complicated top tree structure in small to medium sized graphs.}
 
 \tableofcontents
 
@@ -172,6 +172,10 @@ This abstraction allows us to test the Erikson algorithm using the two data stru
 
 To examine the runtime of different max-flow algorithms, we generated planar graphs of different sizes. A parallelized graph generator and testing framework called SLOTIN was created to examine the runtime of Erikson's algorithm with different implementation details. SLOTIN allows one to specify the distribution of graphs to test, the most commonly used being a uniform distribution over the number of vertices $n$ in a graph where $n \in [a,b]$. SLOTIN first creates graphs in the lower range of the distribution and continues to create larger and larger graphs. Graph creation is done in parallel while two versions of the Erikson algorithm are running. The first version uses the naive implementation of the spanning tree while the second version uses Tarjan and Werneck's top tree data structure to implement the spanning tree. There is a final max-flow algorithm, which is a standard implementation of push-relabel. 
 
+The current graph generation algorithm is an open source planar graph generator written in Java. The generator, located at \url{http://sourceforge.net/projects/planargraph/} generates planar graphs from a Voronoi diagram package. The advantages of this particular generation algorithm are that it is easily interfaced with our fundamental graph classes. In particular, the library outputs graphs in a standard format, and a simple analysis showed that a graph of $N$ thousand vertices can be produced in N seconds. The generator allows one to specify the number of vertices in the graph. However, the library cannot generate graphs above about 12,000 vertices without memory errors and also runs slowly. Another downside of the library is that points are returned in an unnatural manner (a pair of coordinates in the cartesian plane) and the density of the graph is not exposed as a parameter. 
+
+As a first step for graph generation, however, this small library is sufficient to create a set of graphs of differing sizes. The generation algorithm will be run in its own thread and will place its results in a producer queue. 
+
 Each created graph is put into the queues for both versions of the Erikson algorithm and the standard max-flow algorithm. The graph producer process finishes after it has generated some specified number of graphs from its given distribution. The SLOTIN program finishes when all of the queues are emptied, but provides periodic summary statistics on the runtimes of each program with respect to different size graphs. 
 
 This automated testing structure allows us to examine the performance of multiple max-flow algorithms over the same graphs. In particular, we can vary the types of graphs that the set of max-flow algorithms receives by changing the distribution given to SLOTIN. This allows us to examine the effectiveness of each max-flow algorithm over different sets of inputs and identify which algorithms are faster, depending on context. 
@@ -191,7 +195,15 @@ Here, $raw\_loc_i$ is the total lines of code found in method $i$, while $loc_c$
 
 \subsection{SLOTIN Results}
 
-None so far.
+The final results from the SLOTIN framework are still being generated. However, preliminary observations provide a number of interesting patterns. First, the implementation of Erikson's algorithm using the naive spanning tree data structure is faster than the implementation with the dynamic top tree structure for almost all graph sizes tested. Of course, we were unable to test large graphs (where $n > 12,000$). However, this result provides preliminary evidence that the naive implementation is more useful for applications. 
+
+In particular, the top-tree data structure has a $loc$ which is far greater than the $loc$ of the naive spanning tree structure. At least for small to medium sized graphs, it does not make sense to implement a Tarjan and Werneck's top tree data structure.
+
+\section{Conclusion}
+
+This paper presented the Erikson algorthim from \cite{erikson2010} for finding max-flows in directed planar graphs. We presented motivation for the usefulness of this algorithm and summarized its main results, along with the algorithm's operation and runtime. Next, we implemented the Erikson algorithm in two different flavors, and compared these to a standard push-relabel algorithm to solve max-flows. 
+
+We created SLOTIN, our own automated testing framework for examining max-flows in directed, planar graphs. The framework generates planar graphs and tests an arbitrary number of max-flow algorithms on each planar graph. The results from the automated testing were found and analyzed, using the number of lines of code as a benchmark for the amount of development time required. We found that the implementation of the Erikson algorithm using the naive spanning tree data structure outperformed the implementation used Tarjan and Werneck's top tree data structure for small and medium sized graphs. These results, however, are still preliminary.
 
 \newpage
 

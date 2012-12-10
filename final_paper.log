@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.8.16)  10 DEC 2012 12:50
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.8.16)  10 DEC 2012 14:06
 entering extended mode
  %&-line parsing enabled.
 **final_paper.tex
@@ -306,14 +306,13 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 26.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 26.
- (./final_paper.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 3.
+(Font)              <10.95> on input line 27.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 3.
+(Font)              <8> on input line 27.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 3.
-)
+(Font)              <6> on input line 27.
+ (./final_paper.toc)
 \tf@toc=\write4
 \openout4 = `final_paper.toc'.
 
@@ -322,21 +321,21 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 183.
+(hyperref)                removing `math shift' on input line 187.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 183.
+(hyperref)                removing `math shift' on input line 187.
 
 [8] [9] [10] (./final_paper.aux) ) 
 Here is how much of TeX's memory you used:
- 4790 strings out of 493857
- 69586 string characters out of 1153305
+ 4792 strings out of 493857
+ 69606 string characters out of 1153305
  149736 words of memory out of 3000000
- 7972 multiletter control sequences out of 15000+50000
+ 7973 multiletter control sequences out of 15000+50000
  9624 words of font info for 34 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 38i,8n,39p,1020b,301s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,8n,39p,1020b,323s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texmf-texlive/fonts/type1/public/
 amsfonts/cm/cmbx10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm
 /cmbx12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb
@@ -351,9 +350,9 @@ mf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/
 fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-texlive/fonts/type1/
 public/amsfonts/cm/cmti10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsf
 onts/cm/cmtt10.pfb>
-Output written on final_paper.pdf (10 pages, 241206 bytes).
+Output written on final_paper.pdf (10 pages, 246269 bytes).
 PDF statistics:
- 231 PDF objects out of 1000 (max. 8388607)
- 38 named destinations out of 1000 (max. 500000)
- 129 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 239 PDF objects out of 1000 (max. 8388607)
+ 39 named destinations out of 1000 (max. 500000)
+ 137 words of extra memory for PDF output out of 10000 (max. 10000000)
 
