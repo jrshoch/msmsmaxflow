@@ -8,5 +8,4 @@ public interface Edge <T extends Vertex>{
     public T getHead();
     public T getTail();
     
-    public boolean isAdjacentTo(T vertex);
 }
