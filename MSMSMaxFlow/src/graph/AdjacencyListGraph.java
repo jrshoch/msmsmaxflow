@@ -11,37 +11,27 @@ import operations.DualFactory;
 import dual.FaceEdge;
 import dual.FaceVertex;
 
-public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>> 
-	implements Graph<V,E> {
+public class AdjacencyListGraph <FV extends FaceVertex<V,E>, FE extends FaceEdge<FV>,
+	V extends Vertex, E extends Edge<V>> implements PrimalGraph<FV,FE,V,E> {
 
     private final long id;
     private final String name;
     private final Map<V,AdjacencyList<V,E>> adjacencyLists;
-    private final Map<Long, Vertex> vertexMap;
-    private Graph<FaceVertex<V,E>, FaceEdge<FaceVertex<V,E>>> dual;
+    private Map<Long, V> vertexMap;
+    private Graph<FV,FE> dual;
     
     protected AdjacencyListGraph(String name, Map<V,AdjacencyList<V,E>> adjacencyLists){
 	this.name = name;
 	this.id = IdFactory.getId();
 	this.adjacencyLists = Collections.unmodifiableMap(adjacencyLists);
-	this.vertexMap = createVertexMap(adjacencyLists);
     }
     
-    private Map<Long, Vertex> createVertexMap(Map<V,AdjacencyList<V,E>> adjacencyLists){
-	Map<Long, Vertex> outputMap = new HashMap<Long, Vertex> ();
+    private Map<Long, V> createVertexMap(Map<V,AdjacencyList<V,E>> adjacencyLists){
+	Map<Long, V> outputMap = new HashMap<Long, V> ();
 	for (V vertex : adjacencyLists.keySet()){
 	    outputMap.put(vertex.getId(), vertex);
 	}
 	return outputMap;
-    }
-    
-    public static <V extends Vertex, E    @Override
-    public FV getDual(V vertex);
-    
-    @Override
-    public FE getDual(E edge); extends Edge<V>>AdjacencyListGraph 
-    		create(String name, Map<V,AdjacencyList<V,E>> adjacencyLists){
-	return new AdjacencyListGraph(name, adjacencyLists);
     }
     
     @Override
@@ -62,7 +52,7 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
     @Override
     public Collection<E> getEdges() {
 	Set<E> allEdges = new HashSet<E> ();
-	for (AdjacencyList<V,E> adjList : adjacencyLists){
+	for (AdjacencyList<V,E> adjList : adjacencyLists.values()){
 	    for (E edge : adjList.getNeighboringEdges()){
 		allEdges.add(edge);
 	    }
@@ -71,7 +61,10 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
     }
 
     @Override
-    public Vertex getVertex(Long id) {
+    public V getVertex(Long id) {
+	if (vertexMap == null){
+	    vertexMap = createVertexMap(adjacencyLists);
+	}
 	return vertexMap.get(id);
     }
 
@@ -88,12 +81,12 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
     }
     
     @Override
-    public boolean areDirectionallyAdjacent(V fromVertex, V toVertex) {
-	return (getEdgeWithEndpoints(fromVertex, toVertex) != null);
+    public boolean areDirectionallyAdjacent(V tail, V head) {
+	return (getEdgeWithEndpoints(tail, head) != null);
     }
 
     @Override
-    public Graph getDual() {
+    public DualGraph<FV,FE,V,E> getDual() {
 	if (this.dual == null){
 	    this.dual = DualFactory.getDual(this);
 	}
@@ -101,7 +94,7 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
     }
 
     @Override
-    public FaceVertex getDual(Vertex vertex) {
+    public FV getDual(Vertex vertex) {
 	// TODO Auto-generated method stub
 	return null;
     }
