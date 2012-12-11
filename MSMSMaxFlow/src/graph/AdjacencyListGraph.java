@@ -35,7 +35,11 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
 	return outputMap;
     }
     
-    public static <V extends Vertex, E extends Edge<V>>AdjacencyListGraph 
+    public static <V extends Vertex, E    @Override
+    public FV getDual(V vertex);
+    
+    @Override
+    public FE getDual(E edge); extends Edge<V>>AdjacencyListGraph 
     		create(String name, Map<V,AdjacencyList<V,E>> adjacencyLists){
 	return new AdjacencyListGraph(name, adjacencyLists);
     }
