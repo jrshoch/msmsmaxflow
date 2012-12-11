@@ -2,26 +2,17 @@ package graph;
 
 import java.util.List;
 
-public interface AdjacencyList <V extends Vertex, E extends Edge<V>>{
+public interface AdjacencyList {
 
-    public void addAdjacentVertexEdgePair(V vertex, E edge);
-    public void addAdjacentVertexEdgePair(V vertex, E edge, int index);
+    public Vertex getStartingVertexertex();
     
-    public V removeVertex(V vertex);
-    public E removeEdge(E edge);
-    
-    public V removeVertexByIndex(int index);
-    public E removeEdgeByIndex(int index);
-    
-    public V getStartingVertex();
-    
-    public E getEdgeIfAdjacent(V vertex);
+    public Edge getEdgeIfAdjacent(Vertex vertex);
     
     /**
-     * A list of the neighboring vertices in counter-clockwise order
+     * A list of the neighboring vertices in clockwise order
      * @return
      */
-    public List<V> getNeighboringVertices(); 
-    public List<E> getNeighboringEdges();
+    public List<Vertex> getNeighboringVertices(); 
+    public List<Edge> getNeighboringEdges();
     
 }

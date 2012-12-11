@@ -7,8 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class BasicAdjacencyList <V extends Vertex, E extends Edge<V>>  
-	implements AdjacencyList<V,E> {
+public class BasicAdjacencyList implements AdjacencyList {
 
     private final V startingVertex;
     private List<V> verticesList = new ArrayList<V> ();

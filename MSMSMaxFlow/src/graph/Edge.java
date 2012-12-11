@@ -1,11 +1,12 @@
 package graph;
 
-public interface Edge <T extends Vertex>{
+public interface Edge {
 
     public long getId();
     public String getName();
     
-    public T getHead();
-    public T getTail();
+    public Vertex getHead();
+    public Vertex getTail();
     
+    public Long getCapacity();
 }
