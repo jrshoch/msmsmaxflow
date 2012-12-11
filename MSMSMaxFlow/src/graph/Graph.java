@@ -2,7 +2,10 @@ package graph;
 
 import java.util.Collection;
 
-public interface Graph <V extends Vertex, E extends Edge> {
+import dual.FaceEdge;
+import dual.FaceVertex;
+
+public interface Graph <V extends Vertex, E extends Edge<V>> {
 
     public long getId();
     public String getName();
@@ -16,4 +19,8 @@ public interface Graph <V extends Vertex, E extends Edge> {
     
     public boolean areAdjacent(V vertex1, V vertex2);
     public boolean isDirectionallyAdjacent(V fromVertex, V toVertex);
+    
+    public Graph<FaceVertex<V,E>,FaceEdge<FaceVertex<V,E>>> getDual();
+    public FaceVertex<V,E> getDual(V vertex);
+    public FaceEdge<FaceVertex<V,E>> getDual(E edge);
 }

@@ -19,7 +19,7 @@ import dual.FaceVertex;
 
 public class DualFactory {
 
-    public static Map<Edge, List<Face>> getFaces(Graph<Vertex, Edge> graph) {
+    public static Map<Edge, List<Face>> getFaces(Graph<Vertex, Edge<Vertex>> graph) {
         Map <Edge, Integer> edgeCounts = new HashMap <Edge, Integer> ();
         Map <Edge, List<Face>> facesSharingEdge = new HashMap<Edge, List<Face>> ();
         for (Edge edge : graph.getEdges()){
@@ -63,7 +63,7 @@ public class DualFactory {
         return facesSharingEdge;
     }
 
-    private static Edge getRepresentativeEdge(Edge edge, Map<Edge, Integer> edgeCounts,
+    protected static Edge getRepresentativeEdge(Edge edge, Map<Edge, Integer> edgeCounts,
 	    Graph graph){
 	Edge representativeEdge;
 	if (edgeCounts.containsKey(edge)){
@@ -82,7 +82,7 @@ public class DualFactory {
      * when the edge is used in a cycle.
      * @return A collection of edges which constitute a cycle
      */
-    private static List<Edge> getCounterClockwiseCycles(Edge startingEdge, 
+    protected static List<Edge> getCounterClockwiseCycles(Edge startingEdge, 
             Map <Edge, Integer> edgeCounts, Graph graph){
         List<Edge> cycleSet = new LinkedList <Edge> ();
 
