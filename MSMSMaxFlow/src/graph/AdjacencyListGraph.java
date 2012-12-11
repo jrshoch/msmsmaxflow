@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import operations.DualFactory;
 import dual.FaceEdge;
 import dual.FaceVertex;
 
@@ -17,6 +18,7 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
     private final String name;
     private final Map<V,AdjacencyList<V,E>> adjacencyLists;
     private final Map<Long, Vertex> vertexMap;
+    private Graph<FaceVertex<V,E>, FaceEdge<FaceVertex<V,E>>> dual;
     
     protected AdjacencyListGraph(String name, Map<V,AdjacencyList<V,E>> adjacencyLists){
 	this.name = name;
@@ -33,7 +35,8 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
 	return outputMap;
     }
     
-    public static AdjacencyListGraph create(String name, Map<V,AdjacencyList<V,E>> adjacencyLists){
+    public static <V extends Vertex, E extends Edge<V>>AdjacencyListGraph 
+    		create(String name, Map<V,AdjacencyList<V,E>> adjacencyLists){
 	return new AdjacencyListGraph(name, adjacencyLists);
     }
     
@@ -87,8 +90,10 @@ public class AdjacencyListGraph <V extends Vertex, E extends Edge<V>>
 
     @Override
     public Graph getDual() {
-	// TODO Auto-generated method stub
-	return null;
+	if (this.dual == null){
+	    this.dual = DualFactory.getDual(this);
+	}
+	return this.dual;
     }
 
     @Override

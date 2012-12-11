@@ -1,10 +1,9 @@
 package operations;
 
-import static org.junit.Assert.fail;
 import graph.AdjacencyList;
+import graph.AdjacencyListGraph;
 import graph.BasicAdjacencyList;
 import graph.BasicEdge;
-import graph.BasicGraph;
 import graph.BasicVertex;
 import graph.Edge;
 import graph.Graph;
@@ -15,12 +14,35 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import dual.FaceEdge;
+import dual.FaceVertex;
+
 public class DualFactoryTest {
 
     @Test
     public void testGetCounterClockwiseCycle() {
+	Graph<Vertex,Edge<Vertex>> graph = createTwoCycleGraph();
+	Graph<FaceVertex<Vertex,Edge<Vertex>>,FaceEdge<FaceVertex<Vertex,Edge<Vertex>>>> 
+		dual = graph.getDual();
 	
-	fail("Not yet implemented");
+	// Need to have two faces and one separating edge
+	assert (dual.getEdges().size() == 1);
+	assert (dual.getVertices().size() == 2);
+	
+	FaceEdge<FaceVertex<Vertex,Edge<Vertex>>> faceEdge = dual.getEdges().iterator().next();
+	Edge<Vertex> separatingEdge = faceEdge.getPrimalEdge();
+	Edge<Vertex> separatingEdgeReversed = 
+		graph.getEdgeWithEndpoints(separatingEdge.getHead(), separatingEdge.getTail());
+	
+	// Check that the faces are of size 3 and 5 edges, and they both contain the
+	// separating edge or its reverse
+	for (FaceVertex<Vertex,Edge<Vertex>> vertex : dual.getVertices()){
+	    int sizeOfFace = vertex.getFaceVerticesInOrder().size();
+	    assert (sizeOfFace == 3 || sizeOfFace == 5);
+	    assert (vertex.existsInFace(separatingEdge) || 
+		    vertex.existsInFace(separatingEdgeReversed));
+	}
+	
     }
     
     private Graph<Vertex,Edge<Vertex>> createTwoCycleGraph(){
@@ -68,7 +90,8 @@ public class DualFactoryTest {
 	adjacencyB.addAdjacentVertexEdgePair(B, FB);
 	adjacencyLists.put(F, adjacencyF);
 	
-	Graph graph = BasicGraph.create("TwoCycle", adjacencyLists);
+	Graph<Vertex, Edge<Vertex>> graph = AdjacencyListGraph.create("TwoCycle", adjacencyLists);
+	return graph;
     }
 
 }
