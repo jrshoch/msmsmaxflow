@@ -1,11 +1,9 @@
-package dual;
+package graph;
 
-import graph.Edge;
-import graph.IdFactory;
-import graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class BasicFace <V extends Vertex, E extends Edge<V>> implements Face<V,E> {
 

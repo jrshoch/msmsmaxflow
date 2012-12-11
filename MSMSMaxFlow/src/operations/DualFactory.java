@@ -1,7 +1,13 @@
 package operations;
 
+import graph.BasicFace;
+import graph.BasicFaceEdge;
+import graph.BasicFaceVertex;
 import graph.Edge;
 import graph.EdgeMatrix;
+import graph.Face;
+import graph.FaceEdge;
+import graph.FaceVertex;
 import graph.Graph;
 import graph.Vertex;
 
@@ -10,12 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import dual.BasicFace;
-import dual.BasicFaceEdge;
-import dual.BasicFaceVertex;
-import dual.Face;
-import dual.FaceEdge;
-import dual.FaceVertex;
 
 public class DualFactory {
 

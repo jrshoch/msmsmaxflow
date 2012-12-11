@@ -1,7 +1,5 @@
-package dual;
+package graph;
 
-import graph.Edge;
-import graph.Vertex;
 
 import java.util.List;
 
