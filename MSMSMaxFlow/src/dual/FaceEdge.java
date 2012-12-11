@@ -1,11 +1,13 @@
 package dual;
 
 import graph.Edge;
+import graph.Vertex;
 
-public interface FaceEdge <V extends FaceVertex> extends Edge<V>{
+public interface FaceEdge <FV extends FaceVertex<V,E>, V extends Vertex, 
+	E extends Edge<V>> extends Edge<V>{
 
-    public Face getHeadFace();
-    public Face getTailFace();
+    public Face<V,E> getHeadFace();
+    public Face<V,E> getTailFace();
     
-    public Edge getPrimalEdge();
+    public E getPrimalEdge();
 }

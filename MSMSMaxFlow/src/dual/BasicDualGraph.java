@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class BasicDualGraph<FV extends FaceVertex<V,E>, FE extends FaceEdge<FV>,
+public class BasicDualGraph<FV extends FaceVertex<V,E>, FE extends FaceEdge<FV,V,E>,
 	V extends Vertex, E extends Edge<V>> implements DualGraph<FV,FE,V,E> {
 
     private final String name;

@@ -6,9 +6,9 @@ import graph.Vertex;
 import java.util.List;
 
 
-public interface FaceVertex <V extends Vertex, E extends Edge> extends Vertex {
+public interface FaceVertex <V extends Vertex, E extends Edge<V>> extends Vertex {
 
-    public Face getFace();
+    public Face<V,E> getFace();
     public List<V> getFaceVerticesInOrder();
     public List<E> getFaceEdgesInOrder();
     
