@@ -6,4 +6,12 @@
 *.ear
 
 # Eclipse #
-.project
+PlanarGraphGenerator/.project
+PlanarGraphGenerator/.metadata
+PlanarGraphGenerator/bin/**
+PlanarGraphGenerator/.classpath
+PlanarGraphGenerator/.settings/
+PlanarGraphGenerator/.loadpath
+
+# Vim #
+*.swp
