@@ -12,7 +12,7 @@ public interface Graph <V extends Vertex, E extends Edge> {
     
     public Vertex getVertex(Long id);
     
-    public E getEdgeWithEndpoints(V vertex1, V vertex2);
+    public E getEdgeWithEndpoints(V tail, V head);
     
     public boolean areAdjacent(V vertex1, V vertex2);
     public boolean isDirectionallyAdjacent(V fromVertex, V toVertex);

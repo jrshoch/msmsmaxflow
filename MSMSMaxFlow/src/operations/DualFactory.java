@@ -5,33 +5,35 @@ import graph.EdgeMatrix;
 import graph.Graph;
 import graph.Vertex;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import dual.BasicFace;
 import dual.BasicFaceEdge;
 import dual.BasicFaceVertex;
 import dual.Face;
+import dual.FaceEdge;
 import dual.FaceVertex;
 
 public class DualFactory {
 
-    public static Collection<Face> getFaces(Graph graph) {
+    public static Map<Edge, List<Face>> getFaces(Graph<Vertex, Edge> graph) {
         Map <Edge, Integer> edgeCounts = new HashMap <Edge, Integer> ();
+        Map <Edge, List<Face>> facesSharingEdge = new HashMap<Edge, List<Face>> ();
         for (Edge edge : graph.getEdges()){
-            edgeCounts.put(edge, 0);
+            if (graph.getEdgeWithEndpoints(edge.getHead(), edge.getTail()) != null){
+        	edgeCounts.put(edge, 0);
+            }
         }
 
         List<Edge> faceEdges; 
-        Collection<Face> output = new LinkedList<Face> ();
+        List<Face> currentFaceList;
         Face newFace;
         String faceName;
+        Edge representativeEdge;
+        Edge representativeEdge2;
         for (Edge edge : graph.getEdges()){
             if (edgeCounts.isEmpty()){
                 break;
@@ -43,12 +45,35 @@ public class DualFactory {
             }
             faceName += ")";
             newFace = new BasicFace(faceName, faceEdges);
-            output.add(newFace);
+            
+            for (Edge e : faceEdges){
+        	representativeEdge = getRepresentativeEdge(e, edgeCounts, graph);
+        	if (facesSharingEdge.containsKey(representativeEdge)){
+        	    currentFaceList = facesSharingEdge.get(representativeEdge);
+        	    currentFaceList.add(newFace);
+        	} else {
+        	    currentFaceList = new LinkedList<Face> ();
+        	    currentFaceList.add(newFace);
+        	    facesSharingEdge.put(getRepresentativeEdge(edge, edgeCounts, graph),
+        		    currentFaceList);
+        	}
+            }
         }
 
-        return output;
+        return facesSharingEdge;
     }
 
+    private static Edge getRepresentativeEdge(Edge edge, Map<Edge, Integer> edgeCounts,
+	    Graph graph){
+	Edge representativeEdge;
+	if (edgeCounts.containsKey(edge)){
+	    representativeEdge = edge;
+	} else {
+	    representativeEdge = graph.getEdgeWithEndpoints(edge.getHead(), edge.getTail());
+	}
+	return representativeEdge;
+    }
+    
     /**
      * Finds a counter-clock-wise cycle beginning at the starting edge. 
      * 
@@ -64,23 +89,18 @@ public class DualFactory {
         Vertex vertex = startingEdge.getHead();
         Vertex startVertex = startingEdge.getTail();
         Edge nextEdge;
+        Edge representativeEdge;
         int previousCount;
         while (!vertex.equals(startVertex)){
             for (Vertex neighbor : vertex.getNeighboringVertices()){
-                nextEdge = graph.getEdgeWithEndpoints(neighbor, vertex);
-                if (nextEdge == null){
-                    nextEdge = graph.getEdgeWithEndpoints(vertex, neighbor);
-                }
+                nextEdge = graph.getEdgeWithEndpoints(vertex, neighbor);
+                representativeEdge = getRepresentativeEdge(nextEdge, edgeCounts, graph);
 
                 // If the nextEdge is not in edgeCounts, we have deleted it, and
                 // its count is >= 2. 
-                if (edgeCounts.containsKey(nextEdge)){
-                    previousCount = edgeCounts.get(nextEdge);
-                    if (previousCount < 1){
-                        edgeCounts.put(nextEdge, previousCount+1);
-                    } else {
-                        edgeCounts.remove(nextEdge);
-                    }
+                previousCount = edgeCounts.get(representativeEdge);
+                if (previousCount < 1){
+                    edgeCounts.put(representativeEdge, previousCount+1);
                     cycleSet.add(nextEdge);
                     vertex = nextEdge.getHead();
                     break;
@@ -100,57 +120,32 @@ public class DualFactory {
 	}
 	return output;
     }
-
-    protected static void constructGraphFromAdjacentFaces(Face[] faceList, 
-	    EdgeMatrix edgeMatrix, Map<Face,FaceVertex> faceVertices){
-        FaceVertex newVertex;
-        Edge newEdge1;
-        Edge newEdge2;
-        
-        FaceVertex rootVertex = getVertexFromFace(faceList[0], faceVertices, edgeMatrix);
-        for (int i=1; i<faceList.length; i++){
-            newVertex = getVertexFromFace(faceList[i], faceVertices, edgeMatrix);
-            if (!edgeMatrix.areAdjacent(rootVertex, newVertex)){
-        	newEdge1 = new BasicFaceEdge(rootVertex, newVertex);
-        	edgeMatrix.insertEdge(newEdge1);
-            }
-            if (!edgeMatrix.areAdjacent(newVertex, rootVertex)){
-        	newEdge2 = new BasicFaceEdge(newVertex, rootVertex);
-        	edgeMatrix.insertEdge(newEdge2);
-            }
-        }
-        
-        // Do it recursively for the rest of the faces in the list.
-        constructGraphFromAdjacentFaces(Arrays.copyOfRange(faceList, 1, 
-        	faceList.length-1), edgeMatrix, faceVertices);
-    }
-
-    protected static <T> void addToAdjacentFacesList(Map<T,Set<Face>> adjacentFaces, 
-	    T graphObject, Face face){
-	Set<Face> currentAdjacentFaces;
-	if (adjacentFaces.containsKey(graphObject)){
-	    currentAdjacentFaces = adjacentFaces.get(graphObject);
-	} else {
-	    currentAdjacentFaces = new HashSet<Face> ();
-	}
-	currentAdjacentFaces.add(face);
-    }
     
     public static Graph getDual(Graph graph){
-        Collection<Face> faces = getFaces(graph);
-        
-        Map<Edge,Set<Face>> edgeAdjacentFaces = new HashMap<Edge,Set<Face>> ();
-        for (Face face : faces){
-            for (Edge edge : face.getEdgesInOrder()){
-        	addToAdjacentFacesList(edgeAdjacentFaces, edge, face);
-            }
-        }
+        Map<Edge,List<Face>> facesSharingEdge = getFaces(graph);
 
         EdgeMatrix edgeMatrix = new AdjacencyEdgeMatrix(); 
         Map<Face,FaceVertex> faceVertices = new HashMap<Face,FaceVertex> ();
-        for (Set<Face> faceList: edgeAdjacentFaces.values()){
-            constructGraphFromAdjacentFaces(faceList.toArray(new Face[]{}), 
-        	    edgeMatrix, faceVertices);
+        FaceVertex vertex1;
+        FaceVertex vertex2; 
+        Edge representativeEdge;
+        FaceEdge newFaceEdge;
+        for (Map.Entry<Edge,List<Face>> facesSharingSet: facesSharingEdge.entrySet()){
+            vertex1 = getVertexFromFace(facesSharingSet.getValue().get(0),  
+        	    faceVertices, edgeMatrix);
+            vertex2 = getVertexFromFace(facesSharingSet.getValue().get(1),
+        	    faceVertices, edgeMatrix);
+            
+            representativeEdge = facesSharingSet.getKey();
+            // Get the orientation correct
+            if (vertex2.existsInFace(representativeEdge)){
+        	// edge is in the same orientation as vertex2, which means vertex2 is the
+        	// tail of the dual edge
+        	newFaceEdge = new BasicFaceEdge(vertex1, vertex2, representativeEdge);
+            } else {
+        	newFaceEdge = new BasicFaceEdge(vertex2, vertex1, representativeEdge);
+            }
+            edgeMatrix.insertEdge(newFaceEdge);
         }
         return graph;
     }
