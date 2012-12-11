@@ -1,26 +1,18 @@
 package graph;
 
-import java.util.Collection;
 
 public class BasicVertex implements Vertex {
 
     private final long id;
     private final String name;
-    private final EdgeMatrix edgeMatrix;
 
-    private Collection<Vertex> neighboringVertices;
-    private Collection<Edge> edgesFromMe;
-
-    private BasicVertex(String name, EdgeMatrix adjacencyMatrix) {
+    private BasicVertex(String name){
 	this.name = name;
 	this.id = IdFactory.getId();
-	this.edgeMatrix = adjacencyMatrix;
-	this.neighboringVertices = null;
-	this.edgesFromMe = null;
     }
 
-    public static BasicVertex create(String name, EdgeMatrix edgeMatrix) {
-	return new BasicVertex(name, edgeMatrix);
+    public static BasicVertex create(String name) {
+	return new BasicVertex(name);
     }
 
     @Override
@@ -32,31 +24,4 @@ public class BasicVertex implements Vertex {
     public String getName() {
 	return name;
     }
-
-    @Override
-    public Collection<Vertex> getNeighboringVertices() {
-	if (neighboringVertices == null) {
-	    neighboringVertices = edgeMatrix.getNeighboringVertices(this);
-	}
-	return neighboringVertices;
-    }
-
-    @Override
-    public Collection<Edge> getEdgesFrom() {
-	if (edgesFromMe == null) {
-	    edgesFromMe = edgeMatrix.getEdgesFrom(this);
-	}
-	return edgesFromMe;
-    }
-
-    @Override
-    public boolean isAdjacentTo(Edge edge) {
-	return edge.isAdjacentTo(this);
-    }
-
-    @Override
-    public boolean isAdjacentTo(Vertex vertex) {
-	return edgeMatrix.areAdjacent(this, vertex);
-    }
-
 }

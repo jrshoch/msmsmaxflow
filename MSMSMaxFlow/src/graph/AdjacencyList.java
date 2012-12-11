@@ -15,6 +15,8 @@ public interface AdjacencyList <V extends Vertex, E extends Edge<V>>{
     
     public V getStartingVertex();
     
+    public E getEdgeIfAdjacent(V vertex);
+    
     /**
      * A list of the neighboring vertices in counter-clockwise order
      * @return

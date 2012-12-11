@@ -2,14 +2,19 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class BasicAdjacencyList <V extends Vertex, E extends Edge<V>>  
 	implements AdjacencyList<V,E> {
 
     private final V startingVertex;
     private List<V> verticesList = new ArrayList<V> ();
-    private List<E> edgesList = new ArrayList<E> ();
+    private Map<V,E> vertexEdgeMap = new HashMap<V,E> ();
+    private List<E> neighboringEdges;
+    private boolean dirty = false;
     
     protected BasicAdjacencyList(V startingVertex){
 	this.startingVertex = startingVertex;
@@ -22,14 +27,15 @@ public class BasicAdjacencyList <V extends Vertex, E extends Edge<V>>
     @Override
     public void addAdjacentVertexEdgePair(V vertex, E edge) {
 	verticesList.add(vertex);
-	edgesList.add(edge);	
+	vertexEdgeMap.put(vertex, edge);
+	this.dirty = true;
     }    
     
     @Override
     public void addAdjacentVertexEdgePair(V vertex, E edge, int index) {
 	verticesList.add(index, vertex);
-	edgesList.add(index, edge);	
-	
+	vertexEdgeMap.put(vertex, edge);
+	this.dirty = true;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class BasicAdjacencyList <V extends Vertex, E extends Edge<V>>
 
     @Override
     public E removeEdge(E edge) {
-	int index = edgesList.indexOf(edge);
+	int index = verticesList.indexOf(edge.getHead());
 	return removeEdgeByIndex(index);
     }
 
@@ -59,8 +65,10 @@ public class BasicAdjacencyList <V extends Vertex, E extends Edge<V>>
 	if (indexOutOfBounds(index)){
 	    return null;
 	}
-	edgesList.remove(index);
-	return verticesList.remove(index);
+	this.dirty = true;
+	V vertex = verticesList.remove(index);
+	vertexEdgeMap.remove(vertex);
+	return vertex;
     }
 
     @Override
@@ -68,8 +76,9 @@ public class BasicAdjacencyList <V extends Vertex, E extends Edge<V>>
 	if (indexOutOfBounds(index)){
 	    return null;
 	}
-	verticesList.remove(index);
-	return edgesList.remove(index);
+	this.dirty = true;
+	V vertex = verticesList.remove(index);
+	return vertexEdgeMap.remove(vertex);
     }
     
     private boolean indexOutOfBounds(int index){
@@ -78,6 +87,19 @@ public class BasicAdjacencyList <V extends Vertex, E extends Edge<V>>
 
     @Override
     public List<E> getNeighboringEdges() {
-	return Collections.unmodifiableList(edgesList);
+	if (neighboringEdges != null && !dirty){
+	    return neighboringEdges;
+	}
+	List<E> neighEdges = new LinkedList<E> ();
+	for (Map.Entry<V, E> entrySet : vertexEdgeMap.entrySet()){
+	    neighEdges.add(entrySet.getValue());
+	}
+	this.neighboringEdges = Collections.unmodifiableList(neighEdges);
+	return neighboringEdges;
+    }
+
+    @Override
+    public E getEdgeIfAdjacent(V vertex) {
+	return vertexEdgeMap.get(vertex);
     }
 }
