@@ -1,104 +1,67 @@
 package graph;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+
 public class BasicAdjacencyList implements AdjacencyList {
 
-    private final V startingVertex;
-    private List<V> verticesList = new ArrayList<V> ();
-    private Map<V,E> vertexEdgeMap = new HashMap<V,E> ();
-    private List<E> neighboringEdges;
-    private boolean dirty = false;
-    
-    protected BasicAdjacencyList(V startingVertex){
-	this.startingVertex = startingVertex;
+    private final List<Vertex> neighboringVertices;
+    private final Map<Vertex, Edge> vertexToEdge;
+    private final Map<Edge, Edge> edgeToNextEdge;
+    private final Map<Edge, Edge> edgeToPreviousEdge;
+    private final List<Edge> neighboringEdges;
+
+    private BasicAdjacencyList(List<Vertex> verticesInOrder, List<Edge> edgesInOrder) {
+        this.neighboringVertices = ImmutableList.<Vertex> copyOf(verticesInOrder);
+        this.neighboringEdges = ImmutableList.<Edge> copyOf(edgesInOrder);
+        this.vertexToEdge = Maps.newHashMap();
+        this.edgeToNextEdge = Maps.newHashMap();
+        this.edgeToPreviousEdge = Maps.newHashMap();
+        int numberOfNeighbors = neighboringVertices.size();
+        for (int i = 0; i < numberOfNeighbors; i++) {
+            vertexToEdge.put(neighboringVertices.get(i), neighboringEdges.get(i));
+        }
+        Edge first = neighboringEdges.get(0);
+        Edge last = neighboringEdges.get(numberOfNeighbors - 1);
+        for (int i = 0; i < numberOfNeighbors - 1; i++) {
+            edgeToNextEdge.put(neighboringEdges.get(i), neighboringEdges.get(i + 1));
+        }
+        edgeToNextEdge.put(last, first);
+        for (int i = 1; i < numberOfNeighbors; i++) {
+            edgeToPreviousEdge.put(neighboringEdges.get(i), neighboringEdges.get(i - 1));
+        }
+        edgeToPreviousEdge.put(first, last);
     }
-    
-    public static <V extends Vertex, E extends Edge<V>> BasicAdjacencyList create(V startingVertex){
-	return new BasicAdjacencyList<V, E>(startingVertex);
+
+    public static BasicAdjacencyList create(List<Vertex> verticesInOrder, List<Edge> edgesInOrder) {
+        return new BasicAdjacencyList(verticesInOrder, edgesInOrder);
     }
 
     @Override
-    public void addAdjacentVertexEdgePair(V vertex, E edge) {
-	verticesList.add(vertex);
-	vertexEdgeMap.put(vertex, edge);
-	this.dirty = true;
-    }    
-    
-    @Override
-    public void addAdjacentVertexEdgePair(V vertex, E edge, int index) {
-	verticesList.add(index, vertex);
-	vertexEdgeMap.put(vertex, edge);
-	this.dirty = true;
+    public List<Vertex> getNeighboringVertices() {
+        return neighboringVertices;
     }
 
     @Override
-    public V getStartingVertex() {
-	return startingVertex;
+    public List<Edge> getNeighboringEdges() {
+        return neighboringEdges;
     }
 
     @Override
-    public List<V> getNeighboringVertices() {
-	return Collections.unmodifiableList(verticesList);
+    public Edge getEdgeIfAdjacent(Vertex vertex) {
+        return vertexToEdge.get(vertex);
     }
 
     @Override
-    public V removeVertex(V vertex) {
-	int index = verticesList.indexOf(vertex);
-	return removeVertexByIndex(index);
+    public Edge getNextClockwiseEdge(Edge edge) {
+        return edgeToNextEdge.get(edge);
     }
 
     @Override
-    public E removeEdge(E edge) {
-	int index = verticesList.indexOf(edge.getHead());
-	return removeEdgeByIndex(index);
-    }
-
-    @Override
-    public V removeVertexByIndex(int index) {
-	if (indexOutOfBounds(index)){
-	    return null;
-	}
-	this.dirty = true;
-	V vertex = verticesList.remove(index);
-	vertexEdgeMap.remove(vertex);
-	return vertex;
-    }
-
-    @Override
-    public E removeEdgeByIndex(int index) {
-	if (indexOutOfBounds(index)){
-	    return null;
-	}
-	this.dirty = true;
-	V vertex = verticesList.remove(index);
-	return vertexEdgeMap.remove(vertex);
-    }
-    
-    private boolean indexOutOfBounds(int index){
-	return (!(index < verticesList.size() && index >= 0));
-    }
-
-    @Override
-    public List<E> getNeighboringEdges() {
-	if (neighboringEdges != null && !dirty){
-	    return neighboringEdges;
-	}
-	List<E> neighEdges = new LinkedList<E> ();
-	for (Map.Entry<V, E> entrySet : vertexEdgeMap.entrySet()){
-	    neighEdges.add(entrySet.getValue());
-	}
-	this.neighboringEdges = Collections.unmodifiableList(neighEdges);
-	return neighboringEdges;
-    }
-
-    @Override
-    public E getEdgeIfAdjacent(V vertex) {
-	return vertexEdgeMap.get(vertex);
+    public Edge getPreviousClockwiseEdge(Edge edge) {
+        return edgeToPreviousEdge.get(edge);
     }
 }

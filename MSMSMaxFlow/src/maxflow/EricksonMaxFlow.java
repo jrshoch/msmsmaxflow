@@ -9,7 +9,7 @@ import java.math.BigInteger;
 import operations.DualFactory;
 
 public class EricksonMaxFlow {
-    
+
     public static Long getMaxFlow(Graph graph){
 	
 	Graph dual = graph.getDual();

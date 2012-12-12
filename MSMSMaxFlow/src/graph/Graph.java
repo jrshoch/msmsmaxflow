@@ -12,7 +12,6 @@ public interface Graph {
     public Vertex getSink();
     
     public Collection<Vertex> getVertices();
-    public Collection<Edge> getEdges();
     public Collection<Face> getFaces();
     
     public Edge getEdgeFromTailHead(Vertex tail, Vertex head);
