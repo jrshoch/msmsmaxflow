@@ -6,11 +6,13 @@ import graph.BasicAdjacencyList;
 import graph.BasicEdge;
 import graph.BasicVertex;
 import graph.Edge;
+import graph.Face;
 import graph.Graph;
 import graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -19,15 +21,39 @@ public class DualFactoryTest {
     @Test
     public void testGetCounterClockwiseCycle() {
 	Graph graph = createTwoCycleGraph();
-	Graph dual = graph.getDual();
+	DualFactoryResult dfResult = DualFactory.getDual(graph);
+	Graph dual = dfResult.getDual();
 	
 	// The dual will look like a triangle
 	assert (dual.getVertices().size() == 3);
-	
 	for (Vertex vertex : dual.getVertices()){
 	    assert(dual.getNeighboringVertices(vertex).size() == 2);
 	}
 	
+	// There are 5 undirected edges, 10 directed edges in the dual
+	Map<Edge,Edge> primalEdgeToDualEdge = dfResult.getPrimalEdgeToDualEdge();
+	assert(primalEdgeToDualEdge.size() == 10);
+	
+	Map<Vertex,Face> primalVertexToDualFace = dfResult.getPrimalVertexToDualFace();
+	Face dualFace;
+	Face dualFaceNeighbor;
+	Edge dualEdge;
+	Edge primalEdge;
+	
+	// Check to sure sure the correct edges separate two adjacent faces of the dual.
+	// In particular, for two vertices in the primal graph, their corresponding faces
+	// in the dual should be separated by an edge in the dual which is mapped to an
+	// edge in the primal separating the two vertices in the primal.
+	for (Vertex vertex : graph.getVertices()){
+	    dualFace = primalVertexToDualFace.get(vertex);
+	    for (Vertex neighbor : graph.getNeighboringVertices(vertex)){
+		dualFaceNeighbor = primalVertexToDualFace.get(neighbor);
+		dualEdge = dual.getEdgeFromLeftRight(dualFace, dualFaceNeighbor);
+		primalEdge = graph.getEdgeFromTailHead(vertex, neighbor);
+		
+		assert(primalEdgeToDualEdge.get(primalEdge).equals(dualEdge));
+	    }
+	}
     }
     
     /**
