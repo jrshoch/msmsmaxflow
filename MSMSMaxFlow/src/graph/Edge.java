@@ -1,12 +1,12 @@
 package graph;
 
-public interface Edge {
+public interface Edge extends Named {
 
     public long getId();
-    public String getName();
     
     public Vertex getTail();
     public Vertex getHead();
     
     public Long getCapacity();
+    public void setCapacity(Long capacity);
 }

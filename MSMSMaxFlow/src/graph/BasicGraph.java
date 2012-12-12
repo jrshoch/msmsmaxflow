@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import operations.DualFactory;
+import operations.DualFactoryResult;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -13,52 +16,103 @@ public class BasicGraph implements Graph {
     private final long id;
     private final String name;
 
-    private final Vertex source;
-    private final Vertex sink;
-
     private final List<Vertex> vertices;
+    private final List<Face> faces;
     private final Map<Vertex, AdjacencyList> adjacencyLists;
+    private final Map<Face, List<Face>> faceToAdjacentFaces;
+    private final Map<Face, Map<Face, Edge>> leftToRightToEdge;
 
-    private BasicGraph(String name, int numberOfVertices, int source, int sink,
-            List<VertexNeighborInfo> neighborInfos) {
+    private Graph dual;
+    private Map<Edge, Edge> primalEdgeToDualEdge;
+    private Map<Vertex, Face> primalVertexToDualFace;
+    private Map<Face, Vertex> primalFaceToDualVertex;
+
+    private BasicGraph(String name, Map<Vertex, AdjacencyList> vertexToAdjacencyList,
+            Map<Face, List<Face>> faceToAdjacentFaces, Map<Face, Map<Face, Edge>> leftToRightToEdge) {
         this.name = name;
         this.id = IdFactory.getId();
+        this.vertices = Lists.newArrayList(vertexToAdjacencyList.keySet());
+        this.faces = Lists.newArrayList(faceToAdjacentFaces.keySet());
+        this.adjacencyLists = vertexToAdjacencyList;
+        this.faceToAdjacentFaces = faceToAdjacentFaces;
+        this.leftToRightToEdge = leftToRightToEdge;
+    }
+
+    private BasicGraph(String name, List<List<Integer>> neighborIndexLists) {
+        this.name = name;
+        this.id = IdFactory.getId();
+        int numberOfVertices = neighborIndexLists.size();
         List<Vertex> mutableVertices = Lists.newArrayListWithCapacity(numberOfVertices);
         for (int i = 0; i < numberOfVertices; i++) {
-            mutableVertices.add(BasicVertex.create(String.valueOf(i)));
+            mutableVertices.add(BasicVertex.create(BasicVertex.createName(i)));
         }
         this.vertices = ImmutableList.<Vertex> copyOf(mutableVertices);
-        this.source = vertices.get(source);
-        this.sink = vertices.get(sink);
         this.adjacencyLists = Maps.newHashMap();
         for (int i = 0; i < numberOfVertices; i++) {
             Vertex startingVertex = vertices.get(i);
-            VertexNeighborInfo neighborInfo = neighborInfos.get(i);
-            List<Integer> neighborIndices = neighborInfo.getNeighbors();
-            List<Long> capacities = neighborInfo.getCapacities();
+            List<Integer> neighborIndices = neighborIndexLists.get(i);
             int numberOfNeighbors = neighborIndices.size();
             List<Vertex> neighbors = Lists.newArrayListWithCapacity(numberOfVertices);
             List<Edge> neighborEdges = Lists.newArrayListWithCapacity(numberOfVertices);
             for (int j = 0; j < numberOfNeighbors; j++) {
                 int neighborIndex = neighborIndices.get(j).intValue();
-                Long capacity = capacities.get(j);
                 Vertex neighbor = vertices.get(neighborIndex);
-                Edge neighborEdge = BasicEdge.create(startingVertex, neighbor, capacity);
+                Edge neighborEdge = BasicEdge.create(startingVertex, neighbor);
                 neighbors.add(neighbor);
                 neighborEdges.add(neighborEdge);
             }
             adjacencyLists.put(startingVertex, BasicAdjacencyList.create(neighbors, neighborEdges));
         }
-        Map<Face, List<Edge>> faceEdges = Maps.newHashMap();
-        Map<Edge, Face> containingFaces = Maps.newHashMap();
+
+        Map<Face, List<Edge>> faceToFaceEdges = Maps.newHashMap();
+        Map<Edge, Face> edgeToContainingFace = Maps.newHashMap();
+        List<Face> mutableFaces = Lists.newLinkedList();
         for (Vertex startVertex : vertices) {
             for (Edge neighborEdge : getNeighboringEdges(startVertex)) {
                 Vertex currentVertex = neighborEdge.getHead();
-                while (currentVertex != startVertex) {
-                    // in progress
+                if (edgeToContainingFace.get(neighborEdge) != null) {
+                    continue;
                 }
+                Edge currentEdge = neighborEdge;
+                Face face = BasicFace.create(BasicFace.createName(mutableFaces.size()));
+                List<Edge> faceEdges = Lists.newLinkedList();
+                while (currentVertex != startVertex) {
+                    faceEdges.add(currentEdge);
+                    edgeToContainingFace.put(currentEdge, face);
+                    AdjacencyList adjacencyList = adjacencyLists.get(currentVertex);
+                    currentVertex = adjacencyList.getPreviousClockwise(currentEdge.getTail());
+                    currentEdge = adjacencyList.getEdgeIfAdjacent(currentVertex);
+                }
+                faceToFaceEdges.put(face, faceEdges);
             }
         }
+        this.faces = ImmutableList.<Face> copyOf(mutableFaces);
+        faceToAdjacentFaces = Maps.newHashMap();
+        leftToRightToEdge = Maps.newHashMap();
+        for (Face face : faces) {
+            List<Edge> edges = faceToFaceEdges.get(face);
+            List<Face> adjacentFaces = Lists.newArrayListWithCapacity(edges.size());
+            Map<Face, Edge> rightToEdge = Maps.newHashMap();
+            for (Edge edge : edges) {
+                Edge reverseEdge = getReverseEdge(edge);
+                Face containingFace = edgeToContainingFace.get(reverseEdge);
+                adjacentFaces.add(containingFace);
+                rightToEdge.put(containingFace, reverseEdge);
+            }
+            faceToAdjacentFaces.put(face, ImmutableList.<Face> copyOf(adjacentFaces));
+            leftToRightToEdge.put(face, rightToEdge);
+        }
+    }
+
+    public static BasicGraph create(String name, List<List<Integer>> neighborIndexLists) {
+        BasicGraph primal = new BasicGraph(name, neighborIndexLists);
+        primal.setDualInfo(DualFactory.getDual(primal));
+        return primal;
+    }
+
+    public static BasicGraph create(String name, Map<Vertex, AdjacencyList> vertexToAdjacencyList,
+            Map<Face, List<Face>> faceToAdjacentFaces, Map<Face, Map<Face, Edge>> leftToRightToEdge) {
+        return new BasicGraph(name, vertexToAdjacencyList, faceToAdjacentFaces, leftToRightToEdge);
     }
 
     @Override
@@ -72,24 +126,20 @@ public class BasicGraph implements Graph {
     }
 
     @Override
-    public Vertex getSource() {
-        return source;
-    }
-
-    @Override
-    public Vertex getSink() {
-        return sink;
-    }
-
-    @Override
     public Collection<Vertex> getVertices() {
         return vertices;
     }
 
     @Override
     public Collection<Face> getFaces() {
-        // TODO Auto-generated method stub
-        return null;
+        return faces;
+    }
+
+    @Override
+    public Edge getReverseEdge(Edge edge) {
+        Vertex head = edge.getHead();
+        Vertex tail = edge.getTail();
+        return adjacencyLists.get(head).getEdgeIfAdjacent(tail);
     }
 
     @Override
@@ -99,32 +149,34 @@ public class BasicGraph implements Graph {
 
     @Override
     public Edge getEdgeFromLeftRight(Face left, Face right) {
-        // TODO Auto-generated method stub
-        return null;
+        return leftToRightToEdge.get(left).get(right);
+    }
+
+    public void setDualInfo(DualFactoryResult dualInfo) {
+        this.dual = dualInfo.getDual();
+        this.primalEdgeToDualEdge = dualInfo.getPrimalEdgeToDualEdge();
+        this.primalFaceToDualVertex = dualInfo.getPrimalFaceToDualVertex();
+        this.primalVertexToDualFace = dualInfo.getPrimalVertexToDualFace();
     }
 
     @Override
     public Graph getDual() {
-        // TODO Auto-generated method stub
-        return null;
+        return dual;
     }
 
     @Override
     public Edge getDualOf(Edge edge) {
-        // TODO Auto-generated method stub
-        return null;
+        return primalEdgeToDualEdge.get(edge);
     }
 
     @Override
     public Face getDualOf(Vertex vertex) {
-        // TODO Auto-generated method stub
-        return null;
+        return primalVertexToDualFace.get(vertex);
     }
 
     @Override
     public Vertex getDualOf(Face face) {
-        // TODO Auto-generated method stub
-        return null;
+        return primalFaceToDualVertex.get(face);
     }
 
     @Override
@@ -139,8 +191,7 @@ public class BasicGraph implements Graph {
 
     @Override
     public List<Face> getAdjacentFaces(Face face) {
-        // TODO Auto-generated method stub
-        return null;
+        return faceToAdjacentFaces.get(face);
     }
 
     @Override

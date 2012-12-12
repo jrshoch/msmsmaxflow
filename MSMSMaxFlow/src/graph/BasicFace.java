@@ -1,100 +1,54 @@
 package graph;
 
+public class BasicFace implements Face {
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class BasicFace <V extends Vertex, E extends Edge<V>> implements Face<V,E> {
-
+    private final static String NAME_BASE_STRING = "f";
+    
     private final long id;
     private final String name;
-    
-    private final List<E> edges;
-    private List<V> vertices;
-    
-    
-    public BasicFace(String name, List<E> edges){
-	this.id = IdFactory.getId();
-	this.name = name;
-	this.edges = edges;
-    }
-    
-    @Override
-    public List<E> getEdgesInOrder() {
-	return edges;
-    }
-    
-    private void populateVertices(){	
-	vertices = new ArrayList<V> ();
-	for (E edge : edges){
-	    vertices.add(edge.getHead());
-	}
-    }
-    
-    @Override
-    public List<V> getVerticesInOrder() {
-	if (vertices == null){
-	    populateVertices();
-	}
-	return vertices;
-    }
 
-    @Override
-    public boolean isOnBoundaryOfFace(E edge) {
-	return edges.contains(edge);
+    private BasicFace(String name) {
+        this.id = IdFactory.getId();
+        this.name = name;
     }
-
-    @Override
-    public boolean isOnBoundaryOfFace(V vertex) {
-	if (vertices == null){
-	    populateVertices();
-	}
-	return vertices.contains(vertex);
+    
+    public static BasicFace create(String name) {
+        return new BasicFace(name);
     }
-
-    @Override
-    public boolean isAdjacentToFace(E edge) {
-	V head = edge.getHead();
-	V tail = edge.getTail();
-	
-	if (vertices == null){
-	    populateVertices();
-	}
-	boolean headInside = vertices.contains(head);
-	boolean tailInside = vertices.contains(tail);
-	if (headInside){
-	    return isAdjacentToFace(tail);
-	} else if (tailInside){
-	    return isAdjacentToFace(head);
-	} 
-	return false;
-    }
-
-    @Override
-    public boolean isAdjacentToFace(V vertex) {
-	if (vertices == null){
-	    populateVertices();
-	}
-	for (Vertex v : vertices){
-	    for (Vertex neighbor : v.getNeighboringVertices()){
-		if (vertex.equals(neighbor)){
-		    return true;
-		}
-	    }
-	}
-	return false;
+    
+    public static String createName(int i) {
+        return NAME_BASE_STRING + String.valueOf(i);
     }
 
     @Override
     public long getId() {
-	return id;
+        return id;
     }
 
     @Override
     public String getName() {
-	return name;
+        return name;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (id ^ (id >>> 32));
+        return result;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BasicFace other = (BasicFace) obj;
+        if (id != other.id)
+            return false;
+        return true;
+    }
 }

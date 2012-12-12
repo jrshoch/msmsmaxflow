@@ -1,9 +1,7 @@
 package graph;
 
-
-public interface Vertex {
+public interface Vertex extends Named {
 
     public long getId();
-    public String getName();
     
 }

@@ -3,17 +3,14 @@ package graph;
 import java.util.Collection;
 import java.util.List;
 
-public interface Graph {
+public interface Graph extends Named {
 
     public long getId();
-    public String getName();
-    
-    public Vertex getSource();
-    public Vertex getSink();
     
     public Collection<Vertex> getVertices();
     public Collection<Face> getFaces();
     
+    public Edge getReverseEdge(Edge edge);
     public Edge getEdgeFromTailHead(Vertex tail, Vertex head);
     public Edge getEdgeFromLeftRight(Face left, Face right);
     

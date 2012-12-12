@@ -1,8 +1,7 @@
 package graph;
 
-public interface Face {
+public interface Face extends Named {
     
     public long getId();
-    public String getName();
     
 }
