@@ -33,8 +33,11 @@ public class RunSlotin {
         
         GraphGenerator generator = new GraphGenerator(dist, 
         	maxCapacityOnRandomWalk, maxCapacityOffCut, numPaths);
-        new QueueProcessor<MaxFlowProblem>(generator.getProducerQueue(),
-        	consumerQueues);
+        (new Thread(generator)).start();
+        (new Thread(new QueueProcessor<MaxFlowProblem>(generator.getProducerQueue(),
+        	consumerQueues))).start();
+        (new Thread(edmondsKarpConsumerThread)).start();
+        (new Thread(ericksonConsumerThread)).start();
         
         Collection<List<MaxFlowProblemResult>> problemResults = 
         	new LinkedList<List<MaxFlowProblemResult>> ();

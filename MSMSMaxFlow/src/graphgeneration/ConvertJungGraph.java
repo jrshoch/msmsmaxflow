@@ -16,6 +16,7 @@ public class ConvertJungGraph {
 
     public static Graph convertGraph(UndirectedSparseGraph<Pair<Float>,String> graph){
         Collection<Pair<Float>> vertices = graph.getVertices();
+        System.out.println("JUNG graph has " + String.valueOf(graph.getVertexCount()) + " vertices.");
         Float xVal;
         Float yVal;
         

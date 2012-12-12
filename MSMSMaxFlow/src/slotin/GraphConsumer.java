@@ -50,6 +50,7 @@ public class GraphConsumer <T extends MaximumFlowAlgorithm> implements Runnable 
 		    e.printStackTrace();
 		}
 	    } else {
+		System.out.println("got graph.");
 		// Get the source and sink vertices
 		graph = maxFlowProblem.getGraph();
 		s = maxFlowProblem.getS();
@@ -62,6 +63,9 @@ public class GraphConsumer <T extends MaximumFlowAlgorithm> implements Runnable 
 			graph.getVertices().size(), 0, 
 			endTime - startTime, maxFlowProblem.getMaxFlow(), maxFlow);
 		results.add(problemResult);
+		System.out.print("Algorithm: " + problemResult.getAlgorithmName() + " " + 
+			((problemResult.getComputedMaxFlow() == problemResult.getCorrectMaxFlow()) ? "CORRECT" : "WRONG") +
+			", " + String.valueOf(problemResult.getNanoTime()) + " nanoseconds");
 	    }
 	}
     }

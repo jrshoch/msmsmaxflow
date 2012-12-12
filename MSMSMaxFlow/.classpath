@@ -4,7 +4,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/PlanarGraphGenerator"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/guava-13.0.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/PlanarGraphGenerator/lib/collections-generic-4.01.jar"/>
@@ -13,5 +12,6 @@
 	<classpathentry kind="lib" path="/PlanarGraphGenerator/lib/jung-graph-impl-2.0.1.jar"/>
 	<classpathentry kind="lib" path="/PlanarGraphGenerator/lib/mesh.jar"/>
 	<classpathentry kind="lib" path="/PlanarGraphGenerator/lib/quickhull3d.1.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

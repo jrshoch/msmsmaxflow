@@ -39,7 +39,12 @@ public class GraphGenerator implements Runnable {
 			distribution.getWidth(), distribution.getHeight(),
 			maxCapacityOnRandomWalk, maxCapacityOffCut, numPaths);
 
-		producerQueue.add(mfProb);
+		if (mfProb != null) {
+		    System.out.println("generated graph.");
+		    producerQueue.add(mfProb);
+		} else {
+		    System.out.println("generated zero vertex graph.");
+		}
 		distribution.signalForNextGraph();
 	    } catch (NoPathExistsException e) {
 		e.printStackTrace();

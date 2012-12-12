@@ -11,12 +11,12 @@ public class UniformGraphDistribution implements GraphDistribution {
 
     @Override
     public int getWidth(){
-	return (int) (1000*((graphsProduced+1)/numGraphsWanted));
+	return (int) ((1000*(graphsProduced+1))/numGraphsWanted);
     }
     
     @Override
     public int getHeight(){
-	return (int) (1000*((graphsProduced+1)/numGraphsWanted));
+	return (int) ((1000*(graphsProduced+1))/numGraphsWanted);
     }
     
     @Override
