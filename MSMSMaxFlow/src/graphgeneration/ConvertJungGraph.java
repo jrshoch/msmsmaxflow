@@ -23,8 +23,6 @@ public class ConvertJungGraph {
     public static Graph convertGraph(
 	    UndirectedSparseGraph<Pair<Float>, String> graph) {
 	Collection<Pair<Float>> vertices = graph.getVertices();
-	System.out.println("JUNG graph has "
-		+ String.valueOf(graph.getVertexCount()) + " vertices.");
 	Float xVal;
 	Float yVal;
 
@@ -87,10 +85,28 @@ public class ConvertJungGraph {
 		Integer neighbor0 = neighbors.get(0);
 		Integer neighbor1 = neighbors.get(1);
 		verticesToRemove.add(vertex);
-		listOfAdjacencyLists.get(neighbor0).remove(vertex);
-		listOfAdjacencyLists.get(neighbor0).add(neighbor1);
-		listOfAdjacencyLists.get(neighbor1).remove(vertex);
-		listOfAdjacencyLists.get(neighbor1).add(neighbor0);
+		List<Integer> neighbor0Neighbors = listOfAdjacencyLists.get(neighbor0);
+		if (neighbor0Neighbors.contains(neighbor1)) {
+		    neighbor0Neighbors.remove(vertex);
+		    if (!verticesToCheck.contains(neighbor0)) {
+			verticesToCheck.add(neighbor0);
+		    }
+		} else {
+		    int indexOfVertex = neighbor0Neighbors.indexOf(vertex);
+		    neighbor0Neighbors.remove(vertex);
+		    neighbor0Neighbors.add(indexOfVertex, neighbor1);
+		}
+		List<Integer> neighbor1Neighbors = listOfAdjacencyLists.get(neighbor1);
+		if (neighbor1Neighbors.contains(neighbor0)) {
+		    neighbor1Neighbors.remove(vertex);
+		    if (!verticesToCheck.contains(neighbor1)) {
+			verticesToCheck.add(neighbor1);
+		    }
+		} else {
+		    int indexOfVertex = neighbor1Neighbors.indexOf(vertex);
+		    neighbor1Neighbors.remove(vertex);
+		    neighbor1Neighbors.add(indexOfVertex, neighbor0);
+		}
 	    }
 	}
 	Map<Integer, Integer> oldToNew = Maps.newHashMap();

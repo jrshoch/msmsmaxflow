@@ -24,17 +24,12 @@ public class GeneratePlanarGraph {
     public static MaxFlowProblem generateMaxFlowProblem(int width, int height,
 	    long maxCapacityOnRandomWalk, long maxCapacityOffCut, long numPaths)
 	    throws NoPathExistsException {
-	System.out.println("Generating Voronoi graph with width "
-		+ String.valueOf(width) + " and height "
-		+ String.valueOf(height));
 	VDriver vd = new VDriver(width, height);
 	UndirectedSparseGraph<Pair<Float>, String> g = vd.planarGraph;
 	if (g.getVertexCount() == 0)
 	    return null;
-	System.out.println("Got JUNG graph.");
 	Graph graph = ConvertJungGraph.convertGraph(g);
 	if (graph == null) return null;
-	System.out.println("Converted JUNG graph.");
 
 	// Add flow and capacities to our graph.
 	List<Vertex> vertices = Lists.newArrayList(graph.getVertices());
@@ -46,7 +41,6 @@ public class GeneratePlanarGraph {
 	long maxFlow;
 	maxFlow = addCapacitiesToGraph(graph, s, t, maxCapacityOnRandomWalk,
 		maxCapacityOffCut, numPaths);
-	System.out.println("added capacities to graph.");
 	return MaxFlowProblem.create(graph, s, t, maxFlow);
     }
 
