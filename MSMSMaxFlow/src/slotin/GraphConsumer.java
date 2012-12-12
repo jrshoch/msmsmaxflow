@@ -21,6 +21,14 @@ public class GraphConsumer <T extends MaximumFlowAlgorithm> implements Runnable 
 	this.mfAlgo = mfAlgo;
     }
     
+    public List<MaxFlowProblemResult> getResults(){
+	return results;
+    }
+    
+    public ConcurrentLinkedQueue<MaxFlowProblem> getConsumerQueue(){
+	return consumerQueue;
+    }
+    
     @Override
     public void run() {
 	// TODO Auto-generated method stub

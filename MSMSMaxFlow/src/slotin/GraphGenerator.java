@@ -26,6 +26,10 @@ public class GraphGenerator implements Runnable {
 	this.numPaths = numPaths;
     }
     
+    public ConcurrentLinkedQueue<MaxFlowProblem> getProducerQueue(){
+        return producerQueue;
+    }
+    
     @Override
     public void run() {
 	MaxFlowProblem mfProb;
