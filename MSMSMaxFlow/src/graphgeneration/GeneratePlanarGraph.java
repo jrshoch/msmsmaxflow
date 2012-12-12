@@ -1,11 +1,5 @@
 package graphgeneration;
 
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
-import edu.uci.ics.jung.graph.util.Pair;
-import graph.Edge;
-import graph.Graph;
-import graph.Vertex;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,12 +9,18 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import maxflow.MaxFlowProblem;
 import src.pl.edu.agh.planargraphgenerator.VDriver;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.Pair;
+import graph.Edge;
+import graph.Graph;
+import graph.Vertex;
 
 public class GeneratePlanarGraph {
     
-    public static Graph generateGraph(int width, int height, long maxCapacityOnRandomWalk,
-	    long maxCapacityOffCut, long numPaths){
+    public static MaxFlowProblem generateMaxFlowProblem(int width, int height, long maxCapacityOnRandomWalk,
+	    long maxCapacityOffCut, long numPaths) throws NoPathExistsException{
 	VDriver vd = new VDriver(width, height);
 	UndirectedSparseGraph<Pair<Float>, String> g = vd.planarGraph;
 	Graph graph = ConvertJungGraph.convertGraph(g);
@@ -32,13 +32,10 @@ public class GeneratePlanarGraph {
 	while (t == null || t.equals(s)){
 	    t = pickRandomElement(vertices);
 	}
-	try {
-	    addCapacitiesToGraph(graph, s, t, maxCapacityOnRandomWalk,
+	long maxFlow;
+	maxFlow = addCapacitiesToGraph(graph, s, t, maxCapacityOnRandomWalk,
 	    	maxCapacityOffCut, numPaths);
-	} catch (NoPathExistsException e) {
-	    e.printStackTrace();
-	}
-	return graph;
+	return MaxFlowProblem.create(graph, s, t, maxFlow);
     }
     
     public static List<Vertex> convertVerticesToList(Graph graph){
@@ -123,11 +120,25 @@ public class GeneratePlanarGraph {
 	}
     }
     
-    public static void addCapacitiesToGraph(Graph graph, Vertex s, Vertex t, 
+    /**
+     * Adds the capacities to the graph given the parameters from the input. Returns
+     * the max-flow value of the graph that was generated.
+     * 
+     * @param graph
+     * @param s
+     * @param t
+     * @param maxCapacityOnRandomWalk
+     * @param maxCapacityOffCut
+     * @param numPaths
+     * @return
+     * @throws NoPathExistsException
+     */
+    public static long addCapacitiesToGraph(Graph graph, Vertex s, Vertex t, 
 	    long maxCapacityOnRandomWalk, long maxCapacityOffCut, long numPaths) 
 	    throws NoPathExistsException {
 	addCapacitiesFromRandomWalks(graph, s, t, maxCapacityOnRandomWalk, numPaths);
-	addCapacityToEdgesOffCut(graph, s, t, maxCapacityOffCut);
+	return addCapacityToEdgesOffCut(graph, s, t, maxCapacityOffCut);
+	
     }
     
     protected static void addCapacitiesFromRandomWalks(Graph graph, Vertex s, Vertex t,
@@ -137,7 +148,7 @@ public class GeneratePlanarGraph {
 	}
     }
     
-    protected static Set<Edge> addCapacityToEdgesOffCut(Graph graph, Vertex s, 
+    protected static long addCapacityToEdgesOffCut(Graph graph, Vertex s, 
 	    Vertex t, long maxCapacity){
 	Set<Vertex> sourceHalf = new HashSet<Vertex> (graph.getVertices().size());
 	Set<Vertex> sinkHalf = new HashSet<Vertex> (graph.getVertices().size());
@@ -153,7 +164,15 @@ public class GeneratePlanarGraph {
 	    sinkFrontier = getNextFrontier(graph, maxCapacity,
 		    sinkFrontier, sinkHalf, sourceHalf, edgesInCut);
 	}
-	return edgesInCut;
+	
+	// Get the max flow in the cut
+	long maxFlow = 0;
+	for (Edge edge : edgesInCut){
+	    if (sinkHalf.contains(edge.getHead())){
+		maxFlow += edge.getCapacity();
+	    }
+	}
+	return maxFlow;
     }
     
     protected static List<Vertex> getNextFrontier(Graph graph, long maxCapacity, 
