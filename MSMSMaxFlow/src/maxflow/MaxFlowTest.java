@@ -6,10 +6,12 @@ import operations.DualFactoryTest;
 
 import org.junit.Test;
 
+import slotin.MaximumFlowAlgorithm;
+
 public class MaxFlowTest {
 
     @Test
-    public void test() {
+    public void testMaxFlowOnTwoCycles(MaximumFlowAlgorithm mfAlg) {
 	Graph graph = DualFactoryTest.createTwoCycleGraph();
 	Vertex A = null; 
 	Vertex C = null;
@@ -20,7 +22,7 @@ public class MaxFlowTest {
 		C = v;
 	    }
 	}
-	assert (EdmondsKarp.getMaxFlow(graph, A, C) == 15);
+	assert (mfAlg.getMaxFlow(graph, A, C) == 15);
     }
     
     

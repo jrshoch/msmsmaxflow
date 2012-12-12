@@ -1,8 +1,6 @@
 package slotin;
 
-import graph.Edge;
 import graph.Graph;
-import graph.Vertex;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +9,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class GraphConsumer <T extends MaximumFlowAlgorithm> implements Runnable {
 
     private final T mfAlgo;
-    private ConcurrentLinkedQueue<Graph<Vertex,Edge<Vertex>>> consumerQueue = 
-	    new ConcurrentLinkedQueue<Graph<Vertex,Edge<Vertex>>>();
-    private Map<Graph<Vertex,Edge<Vertex>>,Long> executionTimes = 
-	    new HashMap<Graph<Vertex,Edge<Vertex>>,Long> ();
+    private ConcurrentLinkedQueue<Graph> consumerQueue = 
+	    new ConcurrentLinkedQueue<Graph> ();
+    private Map<Graph,Long> executionTimes = 
+	    new HashMap<Graph,Long> ();
     
     public GraphConsumer(T mfAlgo){
 	this.mfAlgo = mfAlgo;
@@ -23,7 +21,7 @@ public class GraphConsumer <T extends MaximumFlowAlgorithm> implements Runnable 
     @Override
     public void run() {
 	// TODO Auto-generated method stub
-	Graph<Vertex,Edge<Vertex>> graph;
+	Graph graph;
 	long maxFlow;
 	
 	long startTime;
@@ -37,8 +35,9 @@ public class GraphConsumer <T extends MaximumFlowAlgorithm> implements Runnable 
 		    e.printStackTrace();
 		}
 	    } else {
+		// Get the source and sink vertices
 		startTime = System.nanoTime();
-		maxFlow = mfAlgo.getMaximumFlow(graph);
+		maxFlow = mfAlgo.getMaxFlow(graph);
 		endTime = System.nanoTime();
 		
 		executionTimes.put(graph, (startTime - endTime));
@@ -46,7 +45,7 @@ public class GraphConsumer <T extends MaximumFlowAlgorithm> implements Runnable 
 	}
     }
     
-    public void addToQueue(Graph<Vertex,Edge<Vertex>> graph){
+    public void addToQueue(Graph graph){
 	consumerQueue.add(graph);
     }
 
