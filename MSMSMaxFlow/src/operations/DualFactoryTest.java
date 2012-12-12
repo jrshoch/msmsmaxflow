@@ -9,88 +9,96 @@ import graph.Edge;
 import graph.Graph;
 import graph.Vertex;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
-
-import dual.FaceEdge;
-import dual.FaceVertex;
 
 public class DualFactoryTest {
 
     @Test
     public void testGetCounterClockwiseCycle() {
-	Graph<Vertex,Edge<Vertex>> graph = createTwoCycleGraph();
-	Graph<FaceVertex<Vertex,Edge<Vertex>>,FaceEdge<FaceVertex<Vertex,Edge<Vertex>>>> 
-		dual = graph.getDual();
+	Graph graph = createTwoCycleGraph();
+	Graph dual = graph.getDual();
 	
-	// Need to have two faces and one separating edge
-	assert (dual.getEdges().size() == 1);
-	assert (dual.getVertices().size() == 2);
+	// The dual will look like a triangle
+	assert (dual.getVertices().size() == 3);
 	
-	FaceEdge<FaceVertex<Vertex,Edge<Vertex>>> faceEdge = dual.getEdges().iterator().next();
-	Edge<Vertex> separatingEdge = faceEdge.getPrimalEdge();
-	Edge<Vertex> separatingEdgeReversed = 
-		graph.getEdgeWithEndpoints(separatingEdge.getHead(), separatingEdge.getTail());
-	
-	// Check that the faces are of size 3 and 5 edges, and they both contain the
-	// separating edge or its reverse
-	for (FaceVertex<Vertex,Edge<Vertex>> vertex : dual.getVertices()){
-	    int sizeOfFace = vertex.getFaceVerticesInOrder().size();
-	    assert (sizeOfFace == 3 || sizeOfFace == 5);
-	    assert (vertex.existsInFace(separatingEdge) || 
-		    vertex.existsInFace(separatingEdgeReversed));
+	for (Vertex vertex : dual.getVertices()){
+	    assert(dual.getNeighboringVertices(vertex).size() == 2);
 	}
 	
     }
     
-    private Graph<Vertex,Edge<Vertex>> createTwoCycleGraph(){
-	Map<Vertex,AdjacencyList<Vertex,Edge<Vertex>>> adjacencyLists = 
-		new HashMap<Vertex,AdjacencyList<Vertex,Edge<Vertex>>> ();
- 
+    /**
+     * Creates a graph that looks like:
+     * 
+     *   | ------ A -------| 
+     *   D        |        B
+     *   | ------ C -------|
+     * 
+     * @return
+     */
+    private Graph createTwoCycleGraph(){
 	Vertex A = BasicVertex.create("A");
 	Vertex B = BasicVertex.create("B");
 	Vertex C = BasicVertex.create("C");
-	Edge<Vertex> AB = BasicEdge.create(B, A);
-	Edge<Vertex> BC = BasicEdge.create(C, B);
-	Edge<Vertex> CA = BasicEdge.create(A, C);
-	
 	Vertex D = BasicVertex.create("D");
-	Vertex E = BasicVertex.create("E");
-	Vertex F = BasicVertex.create("F");
-	Edge<Vertex> AD = BasicEdge.create(D, A);
-	Edge<Vertex> DE = BasicEdge.create(E, D);
-	Edge<Vertex> EF = BasicEdge.create(F, E);
-	Edge<Vertex> FB = BasicEdge.create(B, F);
-	Edge<Vertex> BA = BasicEdge.create(A, B);
 	
-	AdjacencyList<Vertex,Edge<Vertex>> adjacencyA = BasicAdjacencyList.create(A);
-	adjacencyA.addAdjacentVertexEdgePair(B, AB);
-	adjacencyA.addAdjacentVertexEdgePair(D, AD);
-	adjacencyLists.put(A, adjacencyA);
+	Edge AB = BasicEdge.create(A, B);
+	Edge BA = BasicEdge.create(B, A);
+	Edge BC = BasicEdge.create(B, C);
+	Edge CB = BasicEdge.create(C, B);
+	Edge CA = BasicEdge.create(C, A);
+	Edge AC = BasicEdge.create(A, C);
+	Edge AD = BasicEdge.create(A, D);
+	Edge DA = BasicEdge.create(D, A);
+	Edge CD = BasicEdge.create(C, D);
+	Edge DC = BasicEdge.create(D, C);
 	
-	AdjacencyList<Vertex,Edge<Vertex>> adjacencyB = BasicAdjacencyList.create(B);
-	adjacencyB.addAdjacentVertexEdgePair(B, BC);
-	adjacencyLists.put(B, adjacencyB);
+	List<Edge> adjListEdges = new ArrayList<Edge> (2);
+	List<Vertex> adjListVertices = new ArrayList<Vertex> (2);
+	AdjacencyList adjList;
+	
+	adjListEdges.add(AB);
+	adjListEdges.add(AC);
+	adjListEdges.add(AD);
+	adjListVertices.add(B);
+	adjListVertices.add(C);
+	adjListVertices.add(D);
+	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjacencyLists.put(A, adjList);
+	
+	adjListEdges = new ArrayList<Edge> (1);
+	adjListVertices = new ArrayList<Vertex> (1);
+	adjListEdges.add(BC);
+	adjListEdges.add(BA);
+	adjListVertices.add(C);
+	adjListVertices.add(A);
+	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjacencyLists.put(B, adjList);
+	
+	adjListEdges = new ArrayList<Edge> (1);
+	adjListVertices = new ArrayList<Vertex> (1);
+	adjListEdges.add(CD);
+	adjListEdges.add(CA);
+	adjListEdges.add(CB);
+	adjListVertices.add(D);
+	adjListVertices.add(A);
+	adjListVertices.add(B);
+	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjacencyLists.put(C, adjList);
 
-	AdjacencyList<Vertex,Edge<Vertex>> adjacencyC = BasicAdjacencyList.create(C);
-	adjacencyB.addAdjacentVertexEdgePair(A, CA);
-	adjacencyLists.put(C, adjacencyC);
+	adjListEdges = new ArrayList<Edge> (1);
+	adjListVertices = new ArrayList<Vertex> (1);
+	adjListEdges.add(DA);
+	adjListEdges.add(DC);
+	adjListVertices.add(A);
+	adjListVertices.add(C);
+	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjacencyLists.put(D, adjList);
 	
-	AdjacencyList<Vertex,Edge<Vertex>> adjacencyD = BasicAdjacencyList.create(D);
-	adjacencyB.addAdjacentVertexEdgePair(E, DE);
-	adjacencyLists.put(D, adjacencyD);
-	
-	AdjacencyList<Vertex,Edge<Vertex>> adjacencyE = BasicAdjacencyList.create(E);
-	adjacencyB.addAdjacentVertexEdgePair(F, EF);
-	adjacencyLists.put(E, adjacencyE);
-	
-	AdjacencyList<Vertex,Edge<Vertex>> adjacencyF = BasicAdjacencyList.create(F);
-	adjacencyB.addAdjacentVertexEdgePair(B, FB);
-	adjacencyLists.put(F, adjacencyF);
-	
-	Graph<Vertex, Edge<Vertex>> graph = AdjacencyListGraph.create("TwoCycle", adjacencyLists);
+	Graph graph = AdjacencyListGraph.create("TwoCycle", adjacencyLists);
 	return graph;
     }
 

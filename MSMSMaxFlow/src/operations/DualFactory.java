@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class DualFactory {
 
-    public static Graph getDual(Graph graph){
+    public static DualFactoryResult getDual(Graph graph){
 	Map <Vertex,Face> dualVertexToPrimalFace = new HashMap<Vertex,Face> ();
 	Map <Face,Vertex> primalFaceToDualVertex = new HashMap<Face,Vertex> ();
 	Map <Edge,Edge> primalEdgeToDualEdge = new HashMap<Edge,Edge> ();
@@ -82,6 +82,10 @@ public class DualFactory {
 	}
 	
 	Graph dual = BasicGraph.create(vertexToAdjacencyList, faceToAdjacentFaces);
+	DualFactoryResult result = new DualFactoryResult(dual, primalEdgeToDualEdge, 
+		primalFaceToDualVertex, primalVertexToDualFace);
+	
+	return result;
     }
 
 }
