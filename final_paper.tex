@@ -188,9 +188,9 @@ To combat this, we created a two-way breadth first search algorithm which found 
 
 This algorithm allowed us to generate graphs and assign capacities in a non-trivial manner to edges while being able to compute the max-flow through each graph. This testing framework therefore provided us with the ability to test both correctness and speed.
 
-Each created graph is put into the queues for both versions of the Erickson algorithm and the standard max-flow algorithm. The graph producer process finishes after it has generated some specified number of graphs from its given distribution. The SLOTIN program finishes when all of the queues are emptied, but provides periodic summary statistics on the runtimes of each program with respect to different size graphs. 
+Each graph was put into the queues for both versions of the Erickson algorithm and the standard max-flow algorithm. The graph producer process finisheed after it had generated some specified number of graphs from its given distribution. The SLOTIN program finished when all of the queues were emptied, but provided periodic summary statistics on the runtimes of each program with respect to different size graphs. 
 
-This automated testing structure allows us to examine the performance of multiple max-flow algorithms over the same graphs. In particular, we can vary the types of graphs that the set of max-flow algorithms receives by changing the distribution given to SLOTIN. This allows us to examine the effectiveness of each max-flow algorithm over different sets of inputs and identify which algorithms are faster, depending on context. 
+This automated testing structure allowed us to examine the performance of multiple max-flow algorithms over the same graphs. In particular, we can vary the types of graphs that the set of max-flow algorithms receives by changing the distribution given to SLOTIN. This allows us to examine the effectiveness of each max-flow algorithm over different sets of inputs and identify which algorithms are faster, depending on context. 
 
 \section{Results and Analysis}
 
