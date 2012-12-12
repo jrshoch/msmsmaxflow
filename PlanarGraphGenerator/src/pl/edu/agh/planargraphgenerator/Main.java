@@ -1,7 +1,6 @@
 package src.pl.edu.agh.planargraphgenerator;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.Pair;
-
 public class Main  {
 	
 	

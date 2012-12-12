@@ -1,4 +1,4 @@
-package src.pl.edu.agh.planargraphgenerator;
+package graphgeneration;
 
 import java.util.Comparator;
 import java.util.Map;

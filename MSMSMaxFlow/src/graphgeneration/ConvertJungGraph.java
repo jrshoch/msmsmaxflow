@@ -1,4 +1,9 @@
-package src.pl.edu.agh.planargraphgenerator;
+package graphgeneration;
+
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.graph.util.Pair;
+import graph.BasicGraph;
+import graph.Graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,12 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import edu.uci.ics.jung.graph.UndirectedSparseGraph;
-import edu.uci.ics.jung.graph.util.Pair;
-
 public class ConvertJungGraph {
 
-    public Graph convertGraph(UndirectedSparseGraph<Pair<Float>, String> graph){
+    public Graph convertGraph(UndirectedSparseGraph<Pair<Float>,String> graph){
         Collection<Pair<Float>> vertices = graph.getVertices();
         Float xVal;
         Float yVal;
@@ -49,7 +51,7 @@ public class ConvertJungGraph {
         
         List<List<Integer>> listOfAdjacencyLists = 
                 getListOfAdjacencyLists(graph.getVertexCount(), adjacencyLists);
-        Graph graph = new BasicGraph();
+        return BasicGraph.create(NameFactory.getName(), listOfAdjacencyLists);
     }
     
     private List<List<Integer>> getListOfAdjacencyLists(int numVertices,
