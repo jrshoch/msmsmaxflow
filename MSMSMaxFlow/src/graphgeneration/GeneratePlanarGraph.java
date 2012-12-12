@@ -33,6 +33,7 @@ public class GeneratePlanarGraph {
 	    return null;
 	System.out.println("Got JUNG graph.");
 	Graph graph = ConvertJungGraph.convertGraph(g);
+	if (graph == null) return null;
 	System.out.println("Converted JUNG graph.");
 
 	// Add flow and capacities to our graph.
@@ -83,7 +84,7 @@ public class GeneratePlanarGraph {
 		}
 		if (!predecessors.containsKey(neighbor)) {
 		    availableNeighbors += 1;
-		    if ((rand.nextDouble() <= 1.0 / availableNeighbors)
+		    if ((rand.nextDouble() <= (1.0 / availableNeighbors))
 			    || availableNeighbors == 1) {
 			randomNeighbor = neighbor;
 		    }
@@ -92,6 +93,7 @@ public class GeneratePlanarGraph {
 
 	    // Check if we've run out of options, if so, we must backtrack
 	    if (randomNeighbor == null) {
+		
 		vertex = predecessors.get(vertex);
 	    } else {
 		predecessors.put(randomNeighbor, vertex);
@@ -119,7 +121,7 @@ public class GeneratePlanarGraph {
 	    vertexTail = predecessors.get(vertexHead);
 	    currentEdge = graph.getEdgeFromTailHead(vertexTail, vertexHead);
 	    currentEdge.setCapacity(currentEdge.getCapacity() + capacityToAdd);
-	    vertexTail = vertexHead;
+	    vertexHead = vertexTail;
 	}
     }
 

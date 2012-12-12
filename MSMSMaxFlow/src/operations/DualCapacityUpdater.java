@@ -13,7 +13,11 @@ public class DualCapacityUpdater {
     public static void updateDualCapacities(Graph graph) {
         for (Vertex vertex : graph.getVertices()) {
             for (Edge edge : graph.getNeighboringEdges(vertex)) {
-                graph.getDualOf(edge).setCapacity(edge.getCapacity());
+        	Edge dualEdge = graph.getDualOf(edge);
+        	if (dualEdge == null) {
+        	    System.out.println("WTF");
+        	}
+                dualEdge.setCapacity(edge.getCapacity());
             }
         }
     }
