@@ -178,7 +178,7 @@ In practice, one would like to know the magnitude of the number of vertices for 
 
 \subsection{Djikstra Queue}
 
-We made a similar design decision with regards to the queue implementation used by Djikstra's as we did for the dynamic tree structure; instead of using a queue with an asymptotically-efficient decrease-key operation, we used a simple sorted list for the priority queue.  We similarly presume that the crossover point of benefit from the more complicated Djikstra implementation is beyond that of the Erickson vs. Edmonds-Karp comparison, and further that the Djikstra's step of Erickson's algorithm is relatively insignificant.
+We made a similar design decision with regards to the queue implementation used by Djikstra's as we did for the dynamic tree structure; instead of using a Fibonacci Heap, or even a queue with an asymptotically-efficient decrease-key operation, we used a simple sorted list for the priority queue.  We similarly presume that the crossover point of benefit from the more complicated Djikstra implementation is beyond that of the Erickson vs. Edmonds-Karp comparison, and further that the Djikstra's step of Erickson's algorithm is relatively insignificant.  Further research efforts should include the use of a heap, especially on larger graph sizes.  A simple heap can be used since a Fibonacci heap does not improve the asymptotic running time since Erickson's algorithm runs exclusively on planar graphs.
 
 \subsection{Automated Testing}
 
@@ -206,7 +206,7 @@ Both algorithms rely on the same underlying infrastructure: a clockwise adjacenc
 
 Our implementation of Erickson's algorithm required roughly five times as many lines of code (1000 lines).  The majority of the development time was spent calculating the faces and dual of the graph, as well as a simple tree structure to keep track of the slacks of each edge in the main loop of the algorithm.  Other small additional functionalities needed to be implemented as well, such as a Djikstra's search algorithm.  This line count of course does not include additional development time spent on generating graphs and testing graphs (roughly another 1000 lines).
 
-Implementing a more-optimum Erickson's algorithm, i.e. utilizing Top Trees and Fibonacci heaps, could possibly increase the number of lines of code by another order of magnitude.
+Implementing a more-asymptotically-optimum Erickson's algorithm, i.e. utilizing Top Trees and Fibonacci heaps, could possibly increase the number of lines of code by another order of magnitude.
 
 \subsection{SLOTIN Results}
 
