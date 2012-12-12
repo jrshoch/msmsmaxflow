@@ -8,14 +8,14 @@ public class BasicEdge implements Edge {
     private final Vertex tail;
     private final Vertex head;
 
-    private Long capacity;
+    private long capacity;
 
     private BasicEdge(Vertex tail, Vertex head) {
         this.id = IdFactory.getId();
         this.name = tail.getName() + " -> " + head.getName();
         this.tail = tail;
         this.head = head;
-        this.capacity = Long.valueOf(0);
+        this.capacity = 0;
     }
 
     public static BasicEdge create(Vertex tail, Vertex head) {
@@ -43,12 +43,12 @@ public class BasicEdge implements Edge {
     }
 
     @Override
-    public Long getCapacity() {
+    public long getCapacity() {
         return capacity;
     }
     
     @Override
-    public void setCapacity(Long capacity) {
+    public void setCapacity(long capacity) {
         this.capacity = capacity;
     }
 

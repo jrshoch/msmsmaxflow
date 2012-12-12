@@ -4,15 +4,18 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
 public class BasicGraphTest {
 
-    @Test
+    private BasicGraph basicGraph;
+    
+    @Before
     @SuppressWarnings("boxing")
-    public void testBasicGraph() {
+    public void setUp() {
         List<Integer> neighbors0 = ImmutableList.of(1, 2, 3);
         List<Integer> neighbors1 = ImmutableList.of(0, 4, 6);
         List<Integer> neighbors2 = ImmutableList.of(0, 7, 10);
@@ -33,8 +36,36 @@ public class BasicGraphTest {
         List<List<Integer>> neighbors = ImmutableList.of(neighbors0, neighbors1, neighbors2,
                 neighbors3, neighbors4, neighbors5, neighbors6, neighbors7, neighbors8, neighbors9,
                 neighbors10, neighbors11, neighbors12, neighbors13, neighbors14, neighbors15);
-        BasicGraph basicGraph = BasicGraph.create("G", neighbors);
+        basicGraph = BasicGraph.create("G", neighbors);
+    }
+    
+    @Test
+    public void testBasicGraph() {
+        Assert.assertEquals(16, basicGraph.getVertices().size());
         Assert.assertEquals(14, basicGraph.getFaces().size());
+    }
+    
+    @Test
+    public void testDualGraph() {
+        Graph dual = basicGraph.getDual();
+        Assert.assertEquals(14, dual.getVertices().size());
+        Assert.assertEquals(16, dual.getFaces().size());
+    }
+    
+    @Test
+    public void testDualGraphEveryEdge() {
+        Graph dual = basicGraph.getDual();
+        for (Face left : basicGraph.getFaces()) {
+            for (Face right : basicGraph.getAdjacentFaces(left)) {
+                Edge edge = basicGraph.getEdgeFromLeftRight(left, right);
+                Vertex tail = edge.getTail();
+                Vertex head = edge.getHead();
+                Edge dualEdge = basicGraph.getDualOf(edge);
+                Face dualTail = basicGraph.getDualOf(tail);
+                Face dualHead = basicGraph.getDualOf(head);
+                Assert.assertEquals(dualEdge, dual.getEdgeFromLeftRight(dualTail, dualHead));
+            }
+        }
     }
 
 }
