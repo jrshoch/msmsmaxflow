@@ -7,6 +7,6 @@ public interface Edge extends Named {
     public Vertex getTail();
     public Vertex getHead();
     
-    public Long getCapacity();
-    public void setCapacity(Long capacity);
+    public long getCapacity();
+    public void setCapacity(long capacity);
 }

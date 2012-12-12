@@ -75,6 +75,7 @@ public class BasicGraph implements Graph {
                 }
                 Edge currentEdge = neighborEdge;
                 Face face = BasicFace.create(BasicFace.createName(mutableFaces.size()));
+                mutableFaces.add(face);
                 List<Edge> faceEdges = Lists.newLinkedList();
                 while (currentVertex != startVertex) {
                     faceEdges.add(currentEdge);
@@ -83,6 +84,7 @@ public class BasicGraph implements Graph {
                     currentVertex = adjacencyList.getPreviousClockwise(currentEdge.getTail());
                     currentEdge = adjacencyList.getEdgeIfAdjacent(currentVertex);
                 }
+                edgeToContainingFace.put(currentEdge, face);
                 faceToFaceEdges.put(face, faceEdges);
             }
         }
