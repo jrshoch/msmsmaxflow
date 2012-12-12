@@ -1,62 +1,60 @@
 package graph;
 
-import java.util.Collection;
-
 public class BasicVertex implements Vertex {
 
+    private static final String NAME_BASE_STRING = "v";
+    
     private final long id;
     private final String name;
-    private final EdgeMatrix edgeMatrix;
 
-    private Collection<Vertex> neighboringVertices;
-    private Collection<Edge> edgesFromMe;
-
-    private BasicVertex(String name, EdgeMatrix adjacencyMatrix) {
-	this.name = name;
-	this.id = IdFactory.getId();
-	this.edgeMatrix = adjacencyMatrix;
-	this.neighboringVertices = null;
-	this.edgesFromMe = null;
+    private BasicVertex(String name) {
+        this.name = name;
+        this.id = IdFactory.getId();
     }
 
-    public static BasicVertex create(String name, EdgeMatrix edgeMatrix) {
-	return new BasicVertex(name, edgeMatrix);
+    public static BasicVertex create(String name) {
+        return new BasicVertex(name);
+    }
+    
+    public static String createName(int i) {
+        return NAME_BASE_STRING + String.valueOf(i);
     }
 
     @Override
     public long getId() {
-	return id;
+        return id;
     }
 
     @Override
     public String getName() {
-	return name;
+        return name;
     }
 
     @Override
-    public Collection<Vertex> getNeighboringVertices() {
-	if (neighboringVertices == null) {
-	    neighboringVertices = edgeMatrix.getNeighboringVertices(this);
-	}
-	return neighboringVertices;
+    public String toString() {
+        return getName();
+    }
+    
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (id ^ (id >>> 32));
+        return result;
     }
 
     @Override
-    public Collection<Edge> getEdgesFrom() {
-	if (edgesFromMe == null) {
-	    edgesFromMe = edgeMatrix.getEdgesFrom(this);
-	}
-	return edgesFromMe;
-    }
-
-    @Override
-    public boolean isAdjacentTo(Edge edge) {
-	return edge.isAdjacentTo(this);
-    }
-
-    @Override
-    public boolean isAdjacentTo(Vertex vertex) {
-	return edgeMatrix.areAdjacent(this, vertex);
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BasicVertex other = (BasicVertex) obj;
+        if (id != other.id)
+            return false;
+        return true;
     }
 
 }

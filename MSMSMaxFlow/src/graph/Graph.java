@@ -1,19 +1,27 @@
 package graph;
 
 import java.util.Collection;
+import java.util.List;
 
-public interface Graph <V extends Vertex, E extends Edge> {
+public interface Graph extends Named {
 
     public long getId();
-    public String getName();
     
-    public Collection<V> getVertices();
-    public Collection<E> getEdges();
+    public Collection<Vertex> getVertices();
+    public Collection<Face> getFaces();
     
-    public Vertex getVertex(Long id);
+    public Edge getReverseEdge(Edge edge);
+    public Edge getEdgeFromTailHead(Vertex tail, Vertex head);
+    public Edge getEdgeFromLeftRight(Face left, Face right);
     
-    public E getEdgeWithEndpoints(V vertex1, V vertex2);
+    public Graph getDual();
+    public Edge getDualOf(Edge edge);
+    public Face getDualOf(Vertex vertex);
+    public Vertex getDualOf(Face face);
     
-    public boolean areAdjacent(V vertex1, V vertex2);
-    public boolean isDirectionallyAdjacent(V fromVertex, V toVertex);
+    public List<Vertex> getNeighboringVertices(Vertex vertex);
+    public List<Edge> getNeighboringEdges(Vertex vertex);
+    
+    public List<Face> getAdjacentFaces(Face face);
+    
 }

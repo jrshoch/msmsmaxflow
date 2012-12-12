@@ -6,7 +6,7 @@ public class DistanceVertexPairComparator implements Comparator<DistanceVertexPa
 
     @Override
     public int compare(DistanceVertexPair arg0, DistanceVertexPair arg1) {
-	return Long.compare(arg0.getDistance(), arg1.getDistance());
+        return (new Long(arg0.getDistance())).compareTo(new Long(arg1.getDistance()));
     }
-    
+
 }

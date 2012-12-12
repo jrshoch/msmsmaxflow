@@ -5,32 +5,27 @@ import graph.Vertex;
 public class DistanceVertexPair {
 
     private final Vertex vertex;
-    private long distance;
-    
-    public DistanceVertexPair(Vertex vertex){
-	this.vertex = vertex;
-	this.distance = Long.MAX_VALUE;
+    private final long distance;
+
+    private DistanceVertexPair(Vertex vertex, long distance) {
+        this.vertex = vertex;
+        this.distance = distance;
     }
     
-    public DistanceVertexPair(Vertex vertex, long distance){
-	this.vertex = vertex;
-	this.distance = distance;
+    public static DistanceVertexPair create(Vertex vertex, long distance) {
+        return new DistanceVertexPair(vertex, distance);
     }
-    
-    public long getDistance(){
-	return distance;
+
+    public static DistanceVertexPair createInfinite(Vertex vertex) {
+        return new DistanceVertexPair(vertex, Long.MAX_VALUE);
     }
-    
-    public Vertex getVertex(){
-	return vertex;
+
+    public long getDistance() {
+        return distance;
     }
-    
-    public void setDistanceToInfinity(){
-	this.distance = Long.MAX_VALUE;
+
+    public Vertex getVertex() {
+        return vertex;
     }
-    
-    public void setDistance(long distance){
-	this.distance = distance;
-    }
-    
+
 }

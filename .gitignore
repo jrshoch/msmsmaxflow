@@ -4,3 +4,14 @@
 *.jar
 *.war
 *.ear
+
+# Eclipse #
+*/.project
+*/.metadata
+*/bin/*
+*/.classpath
+*/.settings/
+*/.loadpath
+
+# Vim #
+*.swp
