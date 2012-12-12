@@ -21,68 +21,82 @@ public class RunSingleThreaded {
 		graphsWanted);
 	MaxFlowProblem maxFlowProblem;
 	long graphsProduced = 0;
-	while (graphsProduced < distribution.getNumGraphsWanted()) {
-	    try {
-		maxFlowProblem = GeneratePlanarGraph.generateMaxFlowProblem(
-			distribution.getWidth(), distribution.getHeight(),
-			maxCapacityOnRandomWalk, maxCapacityOffCut, numPaths);
-		distribution.signalForNextGraph();
+	long numberOfTimesToRun = 1000;
+	for (int i = 0; i < numberOfTimesToRun; i++) {
+	    while (graphsProduced < distribution.getNumGraphsWanted()) {
+		try {
+		    maxFlowProblem = GeneratePlanarGraph
+			    .generateMaxFlowProblem(distribution.getWidth(),
+				    distribution.getHeight(),
+				    maxCapacityOnRandomWalk, maxCapacityOffCut,
+				    numPaths);
+		    distribution.signalForNextGraph();
 
-		if (maxFlowProblem == null) {
+		    if (maxFlowProblem == null) {
+			continue;
+		    }
+		    graphsProduced++;
+
+		    Graph graph = maxFlowProblem.getGraph();
+		    Vertex s = maxFlowProblem.getS();
+		    Vertex t = maxFlowProblem.getT();
+		    long startTime = System.nanoTime();
+		    long maxFlow = EdmondsKarp.getMaxFlow(graph, s, t);
+		    long endTime = System.nanoTime();
+
+		    MaxFlowProblemResult edmondsKarpProblemResult = new MaxFlowProblemResult(
+			    "EdmondsKarp", graph.getVertices().size(), 0,
+			    endTime - startTime, maxFlowProblem.getMaxFlow(),
+			    maxFlow);
+		    String edmondsKarpString = "Algorithm: "
+			    + edmondsKarpProblemResult.getAlgorithmName()
+			    + " "
+			    + ((edmondsKarpProblemResult.getComputedMaxFlow() == edmondsKarpProblemResult
+				    .getCorrectMaxFlow()) ? "CORRECT" : "WRONG")
+			    + ", "
+			    + "COMPUTED: "
+			    + edmondsKarpProblemResult.getComputedMaxFlow()
+			    + ", \"CORRECT\": "
+			    + edmondsKarpProblemResult.getCorrectMaxFlow()
+			    + ", "
+			    + String.valueOf(edmondsKarpProblemResult
+				    .getNanoTime()) + " nanoseconds";
+		    long edmondsKarpResult = edmondsKarpProblemResult
+			    .getComputedMaxFlow();
+		    maxFlow = EricksonMaxFlow.getMaxFlow(graph, s, t);
+		    endTime = System.nanoTime();
+
+		    MaxFlowProblemResult ericksonsProblemResult = new MaxFlowProblemResult(
+			    "Erickson", graph.getVertices().size(), 0, endTime
+				    - startTime, maxFlowProblem.getMaxFlow(),
+			    maxFlow);
+		    String ericksonsString = "Algorithm: "
+			    + ericksonsProblemResult.getAlgorithmName()
+			    + " "
+			    + ((ericksonsProblemResult.getComputedMaxFlow() == ericksonsProblemResult
+				    .getCorrectMaxFlow()) ? "CORRECT" : "WRONG")
+			    + ", "
+			    + "COMPUTED: "
+			    + ericksonsProblemResult.getComputedMaxFlow()
+			    + ", \"CORRECT\": "
+			    + ericksonsProblemResult.getCorrectMaxFlow()
+			    + ", "
+			    + String.valueOf(ericksonsProblemResult
+				    .getNanoTime()) + " nanoseconds";
+		    long ericksonsResult = ericksonsProblemResult
+			    .getComputedMaxFlow();
+		    if (ericksonsResult == edmondsKarpResult) {
+			System.out.println(graph.getVertices().size() + ","
+				+ edmondsKarpProblemResult.getNanoTime() + ","
+				+ ericksonsProblemResult.getNanoTime());
+		    }
+		} catch (NoPathExistsException e) {
+		    e.printStackTrace();
+		} catch (NullPointerException e) {
 		    continue;
+		} catch (ArrayIndexOutOfBoundsException e) {
+		    break;
 		}
-		graphsProduced++;
-
-		Graph graph = maxFlowProblem.getGraph();
-		Vertex s = maxFlowProblem.getS();
-		Vertex t = maxFlowProblem.getT();
-		long startTime = System.nanoTime();
-		long maxFlow = EdmondsKarp.getMaxFlow(graph, s, t);
-		long endTime = System.nanoTime();
-
-		MaxFlowProblemResult problemResult = new MaxFlowProblemResult(
-			"EdmondsKarp", graph.getVertices().size(), 0, endTime
-				- startTime, maxFlowProblem.getMaxFlow(),
-			maxFlow);
-		String edmondsKarpString = "Algorithm: "
-			+ problemResult.getAlgorithmName()
-			+ " "
-			+ ((problemResult.getComputedMaxFlow() == problemResult
-				.getCorrectMaxFlow()) ? "CORRECT" : "WRONG")
-			+ ", " + "COMPUTED: "
-			+ problemResult.getComputedMaxFlow()
-			+ ", \"CORRECT\": " + problemResult.getCorrectMaxFlow()
-			+ ", " + String.valueOf(problemResult.getNanoTime())
-			+ " nanoseconds";
-		long edmondsKarpResult = problemResult.getComputedMaxFlow();
-		maxFlow = EricksonMaxFlow.getMaxFlow(graph, s, t);
-		endTime = System.nanoTime();
-
-		problemResult = new MaxFlowProblemResult("Erickson", graph
-			.getVertices().size(), 0, endTime - startTime,
-			maxFlowProblem.getMaxFlow(), maxFlow);
-		String ericksonsString = "Algorithm: "
-			+ problemResult.getAlgorithmName()
-			+ " "
-			+ ((problemResult.getComputedMaxFlow() == problemResult
-				.getCorrectMaxFlow()) ? "CORRECT" : "WRONG")
-			+ ", " + "COMPUTED: "
-			+ problemResult.getComputedMaxFlow()
-			+ ", \"CORRECT\": " + problemResult.getCorrectMaxFlow()
-			+ ", " + String.valueOf(problemResult.getNanoTime())
-			+ " nanoseconds";
-		long ericksonsResult = problemResult.getComputedMaxFlow();
-		if (ericksonsResult == edmondsKarpResult) {
-		    System.out.println("YIPPEE! " + graph.getVertices().size());
-		    System.out.println("  " + edmondsKarpString);
-		    System.out.println("  " + ericksonsString);
-		}
-	    } catch (NoPathExistsException e) {
-		e.printStackTrace();
-	    } catch (NullPointerException e) {
-		continue;
-	    } catch (ArrayIndexOutOfBoundsException e) {
-		break;
 	    }
 	}
     }
