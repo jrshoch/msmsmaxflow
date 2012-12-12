@@ -9,32 +9,32 @@ import maxflow.MaxFlowProblem;
 
 public class GraphGenerator implements Runnable {
 
-    private ConcurrentLinkedQueue<MaxFlowProblem> producerQueue = 
-	    new ConcurrentLinkedQueue<MaxFlowProblem> ();
-    
+    private ConcurrentLinkedQueue<MaxFlowProblem> producerQueue =
+	    new ConcurrentLinkedQueue<MaxFlowProblem>();
+
     private long graphsProduced = 0;
     private final GraphDistribution distribution;
     private final long maxCapacityOnRandomWalk;
     private final long maxCapacityOffCut;
     private final long numPaths;
-    
-    public GraphGenerator(GraphDistribution distribution, long maxCapacityOnRandomWalk, 
-	    long maxCapacityOffCut, long numPaths){
+
+    public GraphGenerator(GraphDistribution distribution,
+	    long maxCapacityOnRandomWalk, long maxCapacityOffCut, long numPaths) {
 	this.distribution = distribution;
 	this.maxCapacityOffCut = maxCapacityOffCut;
 	this.maxCapacityOnRandomWalk = maxCapacityOnRandomWalk;
 	this.numPaths = numPaths;
     }
-    
+
     @Override
     public void run() {
 	MaxFlowProblem mfProb;
-	while (graphsProduced < distribution.getNumGraphsWanted()){
+	while (graphsProduced < distribution.getNumGraphsWanted()) {
 	    try {
-		mfProb = GeneratePlanarGraph.generateMaxFlowProblem(distribution.getWidth(),
-		    distribution.getHeight(), maxCapacityOnRandomWalk, 
-		    maxCapacityOffCut, numPaths);
-		
+		mfProb = GeneratePlanarGraph.generateMaxFlowProblem(
+			distribution.getWidth(), distribution.getHeight(),
+			maxCapacityOnRandomWalk, maxCapacityOffCut, numPaths);
+
 		producerQueue.add(mfProb);
 		distribution.signalForNextGraph();
 	    } catch (NoPathExistsException e) {
@@ -43,7 +43,7 @@ public class GraphGenerator implements Runnable {
 	}
     }
 
-    public MaxFlowProblem getNextGraph(){
+    public MaxFlowProblem getNextGraph() {
 	return producerQueue.poll();
     }
 }

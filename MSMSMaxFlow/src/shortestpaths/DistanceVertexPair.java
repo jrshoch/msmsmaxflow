@@ -28,4 +28,8 @@ public class DistanceVertexPair {
         return vertex;
     }
 
+    @Override
+    public String toString() {
+	return "(" + vertex.getName() + ", " + String.valueOf(distance) + ")";
+    }
 }

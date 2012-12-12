@@ -84,6 +84,7 @@ public class BasicGraph implements Graph {
                     currentVertex = adjacencyList.getPreviousClockwise(currentEdge.getTail());
                     currentEdge = adjacencyList.getEdgeIfAdjacent(currentVertex);
                 }
+                faceEdges.add(currentEdge);
                 edgeToContainingFace.put(currentEdge, face);
                 faceToFaceEdges.put(face, faceEdges);
             }
@@ -108,7 +109,15 @@ public class BasicGraph implements Graph {
 
     public static BasicGraph create(String name, List<List<Integer>> neighborIndexLists) {
         BasicGraph primal = new BasicGraph(name, neighborIndexLists);
-        primal.setDualInfo(DualFactory.getDual(primal));
+        DualFactoryResult dualInfo = DualFactory.getDual(primal);
+        Map<Face, Vertex> primalFaceToDualVertex = dualInfo.getPrimalFaceToDualVertex();
+        Map<Vertex, Face> dualVertexToPrimalFace = Maps.newHashMap();
+        for (Face primalFace : primal.getFaces()) {
+            Vertex dualVertex = primalFaceToDualVertex.get(primalFace);
+            dualVertexToPrimalFace.put(dualVertex, primalFace);
+        }
+        dualInfo.getDual().setVertexToDualFace(dualVertexToPrimalFace);
+        primal.setDualInfo(dualInfo);
         return primal;
     }
 
@@ -160,6 +169,10 @@ public class BasicGraph implements Graph {
         this.primalFaceToDualVertex = dualInfo.getPrimalFaceToDualVertex();
         this.primalVertexToDualFace = dualInfo.getPrimalVertexToDualFace();
     }
+    
+    public void setVertexToDualFace(Map<Vertex, Face> vertexToDualFace) {
+	this.primalVertexToDualFace = vertexToDualFace;
+    }
 
     @Override
     public Graph getDual() {
@@ -194,6 +207,11 @@ public class BasicGraph implements Graph {
     @Override
     public List<Face> getAdjacentFaces(Face face) {
         return faceToAdjacentFaces.get(face);
+    }
+    
+    @Override
+    public String toString() {
+	return getName();
     }
 
     @Override

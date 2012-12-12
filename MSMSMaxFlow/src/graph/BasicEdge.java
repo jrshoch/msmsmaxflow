@@ -12,7 +12,7 @@ public class BasicEdge implements Edge {
 
     private BasicEdge(Vertex tail, Vertex head) {
         this.id = IdFactory.getId();
-        this.name = tail.getName() + " -> " + head.getName();
+        this.name = tail.getName() + "->" + head.getName();
         this.tail = tail;
         this.head = head;
         this.capacity = 0;

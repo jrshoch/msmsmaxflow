@@ -51,7 +51,7 @@ public class DjikstraPriorityQueue implements DjikstraQueue {
         if (newDistance < currentDistance) {
             if (queue.remove(element)) {
                 DistanceVertexPair newElement = DistanceVertexPair.create(vertex, newDistance);
-                vertexToElement.put(vertex, element);
+                vertexToElement.put(vertex, newElement);
                 queue.add(newElement);
                 return true;
             }

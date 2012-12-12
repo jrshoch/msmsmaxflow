@@ -35,10 +35,11 @@ public class NaiveDynamicSpanningTree implements DynamicSpanningTree {
                 Long slack = dualSlacks.get(graph.getDualOf(edge));
                 slacks.put(edge, slack);
                 Long reverseSlack = dualSlacks.get(graph.getDualOf(graph.getReverseEdge(edge)));
-                if ((slack.longValue() > 0) && (reverseSlack.longValue() > 0)) {
+                if ((slack.longValue() != 0) && (reverseSlack.longValue() != 0)) {
                     treeNeighbors.add(edge);
                 }
             }
+            tree.put(vertex, treeNeighbors);
         }
         this.recentPath = null;
         this.recentPathStart = null;
@@ -69,11 +70,14 @@ public class NaiveDynamicSpanningTree implements DynamicSpanningTree {
             }
             for (Edge edge : tree.get(vertex)) {
                 Vertex newVertex = edge.getHead();
-                if (predecessors.get(newVertex) == null) {
+                if ((predecessors.get(newVertex) == null) && (newVertex != start)) {
                     predecessors.put(newVertex, edge);
                     queue.add(newVertex);
                 }
             }
+        }
+        if (!recentPathPossible) {
+            return;
         }
         recentPath = Sets.newHashSet();
         long minimumSlack = Long.MAX_VALUE;
