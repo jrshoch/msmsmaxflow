@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 public class ConvertJungGraph {
 
-    public Graph convertGraph(UndirectedSparseGraph<Pair<Float>,String> graph){
+    public static Graph convertGraph(UndirectedSparseGraph<Pair<Float>,String> graph){
         Collection<Pair<Float>> vertices = graph.getVertices();
         Float xVal;
         Float yVal;
@@ -54,7 +54,7 @@ public class ConvertJungGraph {
         return BasicGraph.create(NameFactory.getName(), listOfAdjacencyLists);
     }
     
-    private List<List<Integer>> getListOfAdjacencyLists(int numVertices,
+    private static List<List<Integer>> getListOfAdjacencyLists(int numVertices,
             Map<Integer,List<Integer>> adjLists){
         List<List<Integer>> output = new ArrayList<List<Integer>> ();
         for (int i=0; i<numVertices; i++){
@@ -63,7 +63,7 @@ public class ConvertJungGraph {
         return output;
     }
     
-    private List<Integer> getSortedAdjacencyList(Map<Integer,Double> vertexToAngle){
+    private static List<Integer> getSortedAdjacencyList(Map<Integer,Double> vertexToAngle){
         ValueComparator valueCompare = new ValueComparator(vertexToAngle);
         TreeMap<Integer,Double> sortedMap = new TreeMap<Integer,Double> (valueCompare);
         List<Integer> output = new ArrayList<Integer> (vertexToAngle.size());
@@ -73,7 +73,7 @@ public class ConvertJungGraph {
         return output;
     }
     
-    public double calculateAngleFromVertical(Pair<Float> vertex1, Pair<Float> vertex2){
+    public static double calculateAngleFromVertical(Pair<Float> vertex1, Pair<Float> vertex2){
         double x = vertex1.getFirst() - vertex2.getFirst();
         double y = vertex2.getSecond() - vertex1.getSecond();
         
