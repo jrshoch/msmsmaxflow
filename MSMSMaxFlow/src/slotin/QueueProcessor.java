@@ -1,25 +1,23 @@
 package slotin;
 
-import graph.Graph;
-
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class QueueProcessor implements Runnable {
+public class QueueProcessor<T> implements Runnable {
 
-    private final ConcurrentLinkedQueue<Graph> producerQueue;
-    private final Collection<ConcurrentLinkedQueue<Graph>>
+    private final ConcurrentLinkedQueue<T> producerQueue;
+    private final Collection<ConcurrentLinkedQueue<T>>
     		consumerQueues;
     
-    public QueueProcessor(ConcurrentLinkedQueue<Graph> producerQueue, 
-	    Collection<ConcurrentLinkedQueue<Graph>> consumerQueues){
+    public QueueProcessor(ConcurrentLinkedQueue<T> producerQueue, 
+	    Collection<ConcurrentLinkedQueue<T>> consumerQueues){
 	this.producerQueue = producerQueue;
 	this.consumerQueues = consumerQueues;
     }
     
     @Override
     public void run() {
-	Graph graph;
+	T newObject;
 	while (true){
 	    if (producerQueue.isEmpty()){
 		try {
@@ -28,9 +26,9 @@ public class QueueProcessor implements Runnable {
 		    e.printStackTrace();
 		}
 	    } else {
-		graph = producerQueue.poll();
-		for (ConcurrentLinkedQueue<Graph> nextQueue : consumerQueues){
-		    nextQueue.add(graph);
+		newObject = producerQueue.poll();
+		for (ConcurrentLinkedQueue<T> nextQueue : consumerQueues){
+		    nextQueue.add(newObject);
 		}
 	    }
 	}
