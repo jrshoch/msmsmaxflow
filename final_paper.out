@@ -7,10 +7,12 @@
 \BOOKMARK [2][-]{subsection.3.2}{Parametric Shortest Paths}{section.3}
 \BOOKMARK [2][-]{subsection.3.3}{Erickson's Algorithm}{section.3}
 \BOOKMARK [2][-]{subsection.3.4}{Formalized Algorithm}{section.3}
+\BOOKMARK [2][-]{subsection.3.5}{Algorithm Changes}{section.3}
 \BOOKMARK [1][-]{section.4}{Framework and Infrastructure}{}
 \BOOKMARK [2][-]{subsection.4.1}{Design Decisions}{section.4}
 \BOOKMARK [2][-]{subsection.4.2}{Dynamic Tree Structure}{section.4}
-\BOOKMARK [2][-]{subsection.4.3}{Automated Testing}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{Djikstra Queue}{section.4}
+\BOOKMARK [2][-]{subsection.4.4}{Automated Testing}{section.4}
 \BOOKMARK [1][-]{section.5}{Results and Analysis}{}
 \BOOKMARK [2][-]{subsection.5.1}{Counting Lines of Code loc}{section.5}
 \BOOKMARK [2][-]{subsection.5.2}{SLOTIN Results}{section.5}
