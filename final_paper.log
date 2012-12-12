@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  12 DEC 2012 14:34
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2008.12.28)  12 DEC 2012 14:44
 entering extended mode
 \write18 enabled.
  %&-line parsing enabled.
@@ -312,7 +312,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 {/usr/local/texlive/2008/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
  [4] [5] [6]
-[7] [8] [9]
+[7] [8] [9] [10]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 203.
@@ -321,39 +321,39 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 203.
 
-<num_vertices_histogram.png, id=184, 651.43375pt x 607.26875pt>
+<num_vertices_histogram.png, id=201, 651.43375pt x 607.26875pt>
 File: num_vertices_histogram.png Graphic file (type png)
 
 <use num_vertices_histogram.png>
-<maxflow_results_avg.png, id=185, 667.49374pt x 654.445pt>
+<maxflow_results_avg.png, id=202, 667.49374pt x 654.445pt>
 File: maxflow_results_avg.png Graphic file (type png)
 
 <use maxflow_results_avg.png>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[10 <./num_vertices_histogram.png>]
-<maxflow_results_std.png, id=196, 668.4975pt x 669.50125pt>
+[11 <./num_vertices_histogram.png>]
+<maxflow_results_std.png, id=213, 668.4975pt x 669.50125pt>
 File: maxflow_results_std.png Graphic file (type png)
 
 <use maxflow_results_std.png>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[11 <./maxflow_results_avg.png>] [12 <./maxflow_results_std.png>] [13]
+[12 <./maxflow_results_avg.png>] [13 <./maxflow_results_std.png>] [14] [15]
 (./final_paper.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 4756 strings out of 493876
- 69876 string characters out of 1150567
+ 4762 strings out of 493876
+ 69942 string characters out of 1150567
  148784 words of memory out of 3000000
- 7931 multiletter control sequences out of 10000+50000
+ 7934 multiletter control sequences out of 10000+50000
  9624 words of font info for 34 fonts, out of 3000000 for 5000
  714 hyphenation exceptions out of 8191
- 36i,8n,39p,1295b,290s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,8n,39p,1295b,288s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmbx10.pfb></usr/l
 ocal/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmbx12.pfb></usr/local/texl
 ive/2008/texmf-dist/fonts/type1/bluesky/cm/cmex10.pfb></usr/local/texlive/2008/
@@ -369,9 +369,9 @@ t/fonts/type1/bluesky/cm/cmsy6.pfb></usr/local/texlive/2008/texmf-dist/fonts/ty
 pe1/bluesky/cm/cmsy8.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesk
 y/cm/cmti10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmtt
 10.pfb>
-Output written on final_paper.pdf (13 pages, 405910 bytes).
+Output written on final_paper.pdf (15 pages, 411071 bytes).
 PDF statistics:
- 276 PDF objects out of 1000 (max. 8388607)
- 46 named destinations out of 1000 (max. 131072)
- 164 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 298 PDF objects out of 1000 (max. 8388607)
+ 49 named destinations out of 1000 (max. 131072)
+ 188 words of extra memory for PDF output out of 10000 (max. 10000000)
 
