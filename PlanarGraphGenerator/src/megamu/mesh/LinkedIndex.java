@@ -2,6 +2,7 @@ package src.megamu.mesh;
 
 import processing.core.PApplet;
 
+
 public class LinkedIndex {
 
 	LinkedArray array;
