@@ -32,4 +32,4 @@ plot(numVertices, edmondsAverages, pch=13, xlab="Number of Vertices", ylab="Aver
 lines(lowess(ekt[,1],ekt[,2]), col="blue", lty=2, lwd=6)
 points(numVertices, ericksonAverages)
 lines(lowess(ert[,1],ert[,2]), col="red", lwd=6)
-legend(0, 65000000, c("Edmonds-Karp","Erickson"), lty=c(2,1), col=c("blue", "red"), lwd=2, cex=1.2)
+legend(0, 60000000, c("Edmonds-Karp","Erickson"), lty=c(2,1), col=c("blue", "red"), lwd=2, cex=1.2)
