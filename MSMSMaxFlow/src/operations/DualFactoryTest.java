@@ -1,9 +1,9 @@
 package operations;
 
 import graph.AdjacencyList;
-import graph.AdjacencyListGraph;
 import graph.BasicAdjacencyList;
 import graph.BasicEdge;
+import graph.BasicGraph;
 import graph.BasicVertex;
 import graph.Edge;
 import graph.Face;
@@ -11,6 +11,7 @@ import graph.Graph;
 import graph.Vertex;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,25 +66,26 @@ public class DualFactoryTest {
      * 
      * @return
      */
-    private Graph createTwoCycleGraph(){
+    public static Graph createTwoCycleGraph(){
 	Vertex A = BasicVertex.create("A");
 	Vertex B = BasicVertex.create("B");
 	Vertex C = BasicVertex.create("C");
 	Vertex D = BasicVertex.create("D");
 	
-	Edge AB = BasicEdge.create(A, B);
-	Edge BA = BasicEdge.create(B, A);
-	Edge BC = BasicEdge.create(B, C);
-	Edge CB = BasicEdge.create(C, B);
-	Edge CA = BasicEdge.create(C, A);
-	Edge AC = BasicEdge.create(A, C);
-	Edge AD = BasicEdge.create(A, D);
-	Edge DA = BasicEdge.create(D, A);
-	Edge CD = BasicEdge.create(C, D);
-	Edge DC = BasicEdge.create(D, C);
+	Edge AB = BasicEdge.create(A, B, (long) 5);
+	Edge BA = BasicEdge.create(B, A, (long) 0);
+	Edge BC = BasicEdge.create(B, C, (long) 5);
+	Edge CB = BasicEdge.create(C, B, (long) 0);
+	Edge CA = BasicEdge.create(C, A, (long) 0);
+	Edge AC = BasicEdge.create(A, C, (long) 5);
+	Edge AD = BasicEdge.create(A, D, (long) 5);
+	Edge DA = BasicEdge.create(D, A, (long) 0);
+	Edge CD = BasicEdge.create(C, D, (long) 0);
+	Edge DC = BasicEdge.create(D, C, (long) 5);
 	
 	List<Edge> adjListEdges = new ArrayList<Edge> (2);
 	List<Vertex> adjListVertices = new ArrayList<Vertex> (2);
+	Map<Vertex,AdjacencyList> adjacencyLists = new HashMap<Vertex,AdjacencyList> ();
 	AdjacencyList adjList;
 	
 	adjListEdges.add(AB);
@@ -92,7 +94,7 @@ public class DualFactoryTest {
 	adjListVertices.add(B);
 	adjListVertices.add(C);
 	adjListVertices.add(D);
-	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjList = BasicAdjacencyList.create(adjListVertices, adjListEdges);
 	adjacencyLists.put(A, adjList);
 	
 	adjListEdges = new ArrayList<Edge> (1);
@@ -101,7 +103,7 @@ public class DualFactoryTest {
 	adjListEdges.add(BA);
 	adjListVertices.add(C);
 	adjListVertices.add(A);
-	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjList = BasicAdjacencyList.create(adjListVertices, adjListEdges);
 	adjacencyLists.put(B, adjList);
 	
 	adjListEdges = new ArrayList<Edge> (1);
@@ -112,7 +114,7 @@ public class DualFactoryTest {
 	adjListVertices.add(D);
 	adjListVertices.add(A);
 	adjListVertices.add(B);
-	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjList = BasicAdjacencyList.create(adjListVertices, adjListEdges);
 	adjacencyLists.put(C, adjList);
 
 	adjListEdges = new ArrayList<Edge> (1);
@@ -121,10 +123,10 @@ public class DualFactoryTest {
 	adjListEdges.add(DC);
 	adjListVertices.add(A);
 	adjListVertices.add(C);
-	adjList = BasicAdjacencyList.create(adjListEdges, adjListVertices);
+	adjList = BasicAdjacencyList.create(adjListVertices, adjListEdges);
 	adjacencyLists.put(D, adjList);
 	
-	Graph graph = AdjacencyListGraph.create("TwoCycle", adjacencyLists);
+	Graph graph = BasicGraph.create("TwoCycle", adjacencyLists);
 	return graph;
     }
 
