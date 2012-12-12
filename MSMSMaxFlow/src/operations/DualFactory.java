@@ -99,7 +99,7 @@ public class DualFactory {
             leftToRightToEdge.put(left, rightToEdge);
         }
 
-        Graph dual = BasicGraph.create(getDualName(graph), vertexToAdjacencyList,
+        BasicGraph dual = BasicGraph.create(getDualName(graph), vertexToAdjacencyList,
                 faceToAdjacentFaces, leftToRightToEdge);
         DualFactoryResult result = new DualFactoryResult(dual, primalEdgeToDualEdge,
                 primalFaceToDualVertex, primalVertexToDualFace);

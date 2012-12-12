@@ -84,7 +84,7 @@ public class EdmondsKarp {
                 // If the new flow is still greater than 0 and has not yet been
                 // searched
                 // we process the vertex
-                if (edge.getCapacity() - edgesToFlowHash.get(edge).longValue() > 0
+                if ((edge.getCapacity() - getPreviousFlowFromHash(edge, edgesToFlowHash)) > 0
                         && !predecessors.containsKey(neighbor)) {
                     // newCapacity = min(pathCapacity[vertex], edgeCapacity -
                     // Flow)

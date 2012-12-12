@@ -1,20 +1,20 @@
 package operations;
 
+import graph.BasicGraph;
 import graph.Edge;
 import graph.Face;
-import graph.Graph;
 import graph.Vertex;
 
 import java.util.Map;
 
 public class DualFactoryResult {
 
-    private final Graph dual;
+    private final BasicGraph dual;
     private final Map<Edge,Edge> primalEdgeToDualEdge;
     private final Map<Face,Vertex> primalFaceToDualVertex;
     private final Map<Vertex,Face> primalVertexToDualFace;
     
-    public DualFactoryResult(Graph dual, Map<Edge,Edge> primalEdgeToDualEdge, 
+    public DualFactoryResult(BasicGraph dual, Map<Edge,Edge> primalEdgeToDualEdge, 
 	    Map<Face,Vertex> primalFaceToDualVertex, 
 	    Map<Vertex,Face> primalVertexToDualFace){
 	this.dual = dual;
@@ -23,7 +23,7 @@ public class DualFactoryResult {
 	this.primalVertexToDualFace = primalVertexToDualFace;
     }
 
-    public Graph getDual() {
+    public BasicGraph getDual() {
 	return dual;
     }
 

@@ -6,7 +6,6 @@ import graph.Vertex;
 
 import java.util.Map;
 
-
 import com.google.common.collect.Maps;
 
 public class Djikstras {
@@ -27,7 +26,11 @@ public class Djikstras {
             distanceVertexHash.put(tail, new Long(distance));
 
             for (Edge edge : graph.getNeighboringEdges(tail)) {
-                long newDistance = distance + edge.getCapacity();
+        	long capacity = edge.getCapacity();
+        	if (capacity == 0) {
+        	    continue;
+        	}
+                long newDistance = distance + capacity;
                 Vertex head = edge.getHead();
                 if (queue.decreaseKey(head, newDistance)) {
                     predecessors.put(head, tail);

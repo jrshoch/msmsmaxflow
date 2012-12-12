@@ -25,7 +25,7 @@ public class NaiveDynamicSpanningTree implements DynamicSpanningTree {
     private boolean recentPathPossible;
     private boolean recentPathClean;
 
-    private NaiveDynamicSpanningTree(Graph graph, Map<Edge, Long> dualSlacks) {
+    private NaiveDynamicSpanningTree(Graph graph, Map<Edge, Long> dualSlacks, Map<Vertex, Vertex> predecessors) {
         this.tree = Maps.newHashMap();
         this.graph = graph;
         this.slacks = Maps.newHashMap();
@@ -34,11 +34,13 @@ public class NaiveDynamicSpanningTree implements DynamicSpanningTree {
             for (Edge edge : graph.getNeighboringEdges(vertex)) {
                 Long slack = dualSlacks.get(graph.getDualOf(edge));
                 slacks.put(edge, slack);
-                Long reverseSlack = dualSlacks.get(graph.getDualOf(graph.getReverseEdge(edge)));
-                if ((slack.longValue() > 0) && (reverseSlack.longValue() > 0)) {
+                Vertex head = graph.getDualOf(edge).getHead();
+                Vertex tail = graph.getDualOf(edge).getTail();
+                if ((predecessors.get(head) != tail) && (predecessors.get(tail) != head)) {
                     treeNeighbors.add(edge);
                 }
             }
+            tree.put(vertex, treeNeighbors);
         }
         this.recentPath = null;
         this.recentPathStart = null;
@@ -49,8 +51,8 @@ public class NaiveDynamicSpanningTree implements DynamicSpanningTree {
     }
 
     public static NaiveDynamicSpanningTree createFromDualSlacks(Graph graph,
-            Map<Edge, Long> dualSlacks) {
-        return new NaiveDynamicSpanningTree(graph, dualSlacks);
+            Map<Edge, Long> dualSlacks, Map<Vertex, Vertex> predecessors) {
+        return new NaiveDynamicSpanningTree(graph, dualSlacks, predecessors);
     }
 
     private void calculatePath(Vertex start, Vertex end) {
@@ -69,11 +71,14 @@ public class NaiveDynamicSpanningTree implements DynamicSpanningTree {
             }
             for (Edge edge : tree.get(vertex)) {
                 Vertex newVertex = edge.getHead();
-                if (predecessors.get(newVertex) == null) {
+                if ((predecessors.get(newVertex) == null) && (newVertex != start)) {
                     predecessors.put(newVertex, edge);
                     queue.add(newVertex);
                 }
             }
+        }
+        if (!recentPathPossible) {
+            return;
         }
         recentPath = Sets.newHashSet();
         long minimumSlack = Long.MAX_VALUE;
