@@ -33,7 +33,7 @@ public class RunSlotin {
         
         GraphGenerator generator = new GraphGenerator(dist, 
         	maxCapacityOnRandomWalk, maxCapacityOffCut, numPaths);
-        new QueueProcessor(generator.getProducerQueue(),
+        new QueueProcessor<MaxFlowProblem>(generator.getProducerQueue(),
         	consumerQueues);
         
         Collection<List<MaxFlowProblemResult>> problemResults = 
@@ -41,7 +41,15 @@ public class RunSlotin {
         problemResults.add(edmondsKarpConsumerThread.getResults());
         problemResults.add(ericksonConsumerThread.getResults());
         
-        WriteResultsToFile.WriteResultsToFile("maxFlowResults.csv", consumerQueues);
+        while (true) {
+            WriteResultsToFile.WriteResultsToFile("maxFlowResults.csv", problemResults);
+            try {
+        	Thread.sleep(30000);
+            } catch (InterruptedException e) {
+        	e.printStackTrace();
+        	return;
+            }
+        }
         
     }
 }
