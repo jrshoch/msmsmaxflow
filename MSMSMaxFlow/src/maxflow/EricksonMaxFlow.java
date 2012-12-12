@@ -21,8 +21,7 @@ public class EricksonMaxFlow {
 	Graph dual = graph.getDual();
 	// Origin must be adjacent to sink
 	Face sinkFace = graph.getDualOf(sink);
-	Face adjacentToSinkFace = dual.getAdjacentFaces(sinkFace).iterator()
-		.next();
+	Face adjacentToSinkFace = dual.getAdjacentFaces(sinkFace).get(0);
 	Vertex origin = dual.getEdgeFromLeftRight(sinkFace, adjacentToSinkFace)
 		.getTail();
 	DistancesAndPredecessors distancesAndPredecessors = Djikstras
@@ -33,7 +32,7 @@ public class EricksonMaxFlow {
 	Map<Edge, Long> slacks = SlackCalculator.getSlacksFromDistances(dual,
 		distances);
 	DynamicSpanningTree spanningTree = NaiveDynamicSpanningTree
-		.createFromDualSlacks(graph, slacks);
+		.createFromDualSlacks(graph, slacks, predecessors);
 	while (spanningTree.areInSameComponent(source, sink)) {
 	    Edge minimumEdge = spanningTree.getMinimumEdgeOnPath(source, sink);
 	    long slack = spanningTree.getSlack(minimumEdge);
