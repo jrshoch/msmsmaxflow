@@ -14,9 +14,6 @@ public class DualCapacityUpdater {
         for (Vertex vertex : graph.getVertices()) {
             for (Edge edge : graph.getNeighboringEdges(vertex)) {
         	Edge dualEdge = graph.getDualOf(edge);
-        	if (dualEdge == null) {
-        	    System.out.println("WTF");
-        	}
                 dualEdge.setCapacity(edge.getCapacity());
             }
         }

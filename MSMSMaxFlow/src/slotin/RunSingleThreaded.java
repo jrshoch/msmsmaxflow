@@ -17,12 +17,13 @@ public class RunSingleThreaded {
 
     public static void main(String[] args) {
 
-	GraphDistribution distribution = new UniformGraphDistribution(
-		graphsWanted);
 	MaxFlowProblem maxFlowProblem;
 	long graphsProduced = 0;
 	long numberOfTimesToRun = 1000;
 	for (int i = 0; i < numberOfTimesToRun; i++) {
+	    GraphDistribution distribution = new UniformGraphDistribution(
+			graphsWanted);
+	    graphsProduced = 0;
 	    while (graphsProduced < distribution.getNumGraphsWanted()) {
 		try {
 		    maxFlowProblem = GeneratePlanarGraph
