@@ -198,7 +198,7 @@ This section examines the performance of the Erickson algorithm in comparison to
 
 \subsection{Counting Lines of Code $loc$}
 
-Since each algorithm uses the fundamental data structures, such as Graph, Vertex, and Edge in a different manner, we need to control how each algorithm used each data structure. In particular, consider an algorithm which uses a specialized method on a graph that no other algorithm uses. The developer of the graph interface would have to spent some amount of extra time solely to cater to that algorithm's needs. Therefore, we define the number of lines of code associated with a method $i$ in a particular class $c$ using the following formula:
+Since each algorithm uses the fundamental data structures, such as Graph, Vertex, and Edge in a different manner, we need to control for whether or not an algorithm used a given data structure. In particular, consider an algorithm which used a specialized method on a graph that no other algorithm used. The developer of the graph interface would have to have spent some amount of extra time solely to cater to that algorithm's needs. Therefore, we define the number of lines of code associated with a method $i$ in a particular class $c$ using the following formula:
 \begin{eqnarray}
 loc_{i} = raw\_loc_{i} + \frac{1}{4} raw\_loc_{c} + \sum_{j \in i} loc_{j} 
 \end{eqnarray}
